@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Erina Stella</title>
+  <subtitle>Updates from Erina Stella — Gospel musician and teacher.</subtitle>
+  <link href="https://erinastella.github.io/"/>
+  <link href="https://erinastella.github.io/atom.xml" rel="self"/>
+  <id>https://erinastella.github.io/</id>
+  <updated>2026-07-12T07:18:00+03:00</updated>
+  <author>
+    <name>Erina Stella</name>
+  </author>
+  <entry>
+    <title>New Worship Lesson Series</title>
+    <link href="https://erinastella.github.io/music/worship-lesson-series"/>
+    <id>https://erinastella.github.io/music/worship-lesson-series</id>
+    <updated>2026-07-06T10:00:00+03:00</updated>
+    <summary>Practical lessons for choir and worship teams from Erina Stella.</summary>
+  </entry>
+  <entry>
+    <title>Upcoming Community Concert</title>
+    <link href="https://erinastella.github.io/events/community-concert-2026"/>
+    <id>https://erinastella.github.io/events/community-concert-2026</id>
+    <updated>2026-06-01T09:00:00+03:00</updated>
+    <summary>Join Erina Stella for a gospel evening with local choirs and musicians.</summary>
+  </entry>
+</feed>
