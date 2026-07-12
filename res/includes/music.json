@@ -1,1 +1,20 @@
-
+[
+  {
+    "title": "Grace Abounds",
+    "dateCreated": "2025-03-15",
+    "art": "res/drawables/album-grace.jpg",
+    "duration": 4.5,
+    "album": "Grace Abounds",
+    "description": "A heartfelt worship song celebrating God's overwhelming grace and mercy.",
+    "url": "res/audio/grace-abounds.mp3"
+  },
+  {
+    "title": "Oli Katonda (You Are God)",
+    "dateCreated": "2024-11-01",
+    "art": "res/drawables/album-single.jpg",
+    "duration": 4.32,
+    "album": "Singles",
+    "description": "A Luganda worship anthem declaring the greatness of God.",
+    "url": "res/audio/oli-katonda.mp3"
+  }
+]
