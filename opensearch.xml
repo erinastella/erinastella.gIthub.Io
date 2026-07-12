@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Erina Stella Search</ShortName>
+  <Description>Search the Erina Stella website</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Url type="text/html" template="https://erinastella.github.io/?s={searchTerms}"/>
+  <Image height="16" width="16" type="image/png">/res/seo/favicon.png</Image>
+  <Developer>Erina Stella</Developer>
+  <Attribution>© Erina Stella</Attribution>
+  <SyndicationRight>open</SyndicationRight>
+  <AdultContent>false</AdultContent>
+</OpenSearchDescription>
