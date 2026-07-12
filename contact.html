@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Erina Stella</title>
+    <meta name="description" content="Get in touch with Erina Stella Nakiberu for bookings, ministry engagements, and collaborations.">
+    
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Satoshi', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        neutral: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        .dark .glass-nav {
+            background-color: rgba(2, 6, 23, 0.8);
+        }
+        .sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        .sidebar-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .sidebar-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50 antialiased selection:bg-brand-200 selection:text-brand-900 transition-colors duration-300 overflow-x-hidden">
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </symbol>
+        <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </symbol>
+        <symbol id="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+        </symbol>
+        <symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m2 7 10 7 10-7"/>
+        </symbol>
+        <symbol id="icon-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+        </symbol>
+        <symbol id="icon-youtube" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </symbol>
+        <symbol id="icon-spotify" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+        </symbol>
+        <symbol id="icon-apple-music" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M23.997 6.124c0-.738-.065-1.47-.24-2.19-.317-1.29-2.062-2.362-3.305-2.568-.64-.106-1.294-.162-1.953-.162-1.49.024-2.98.202-4.454.533-1.074.242-2.116.61-3.106 1.097-1.232.606-2.327 1.44-3.233 2.455-.76.852-1.376 1.82-1.83 2.854-.266.607-.483 1.234-.65 1.874-.11.42-.196.845-.256 1.272-.08.565-.12 1.135-.12 1.704 0 .285.012.57.036.853.06.705.18 1.402.358 2.086.222.856.57 1.674 1.034 2.423.485.783 1.105 1.476 1.83 2.048.606.475 1.28.858 2.003 1.139.905.353 1.867.53 2.835.53.412 0 .825-.034 1.234-.102.862-.144 1.694-.415 2.467-.805 1.092-.55 2.022-1.37 2.715-2.39.554-.816.957-1.726 1.187-2.682.173-.72.26-1.462.26-2.21-.002-.372-.02-.744-.06-1.114zM12.09 2.43c1.288-.277 2.606-.383 3.914-.317 1.06.053 2.103.26 3.082.628.505.19.957.52 1.29.96.274.362.42.798.43 1.245.014.635-.23 1.242-.67 1.715-.462.497-1.065.86-1.73 1.086-1.1.375-2.28.467-3.428.27-1.022-.175-2-.535-2.88-1.06-.634-.38-1.19-.87-1.64-1.444-.342-.436-.56-.942-.636-1.473-.1-.698.02-1.41.342-2.05.29-.576.704-1.08 1.206-1.48.18-.144.368-.28.56-.407.16-.106.322-.21.486-.31.166-.1.336-.197.508-.29.228-.124.46-.242.694-.352.116-.055.233-.11.35-.162.095-.042.19-.083.286-.123.284-.117.572-.223.864-.318.157-.05.315-.098.474-.143.29-.08.583-.15.878-.207.16-.03.32-.058.48-.08.27-.038.543-.06.816-.07z"/>
+        </symbol>
+        <symbol id="icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><circle cx="17.5" cy="6.5" r="1.5"/>
+        </symbol>
+        <symbol id="icon-facebook" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </symbol>
+        <symbol id="icon-twitter-x" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </symbol>
+    </svg>
+
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-brand-600 text-white px-4 py-2 rounded-md z-50">Skip to main content</a>
+
+    <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 z-40 bg-black/50 dark:bg-black/70" aria-hidden="true"></div>
+
+    <div id="sidebar" class="sidebar fixed top-0 right-0 h-full w-64 max-w-[80%] bg-white dark:bg-neutral-950 shadow-2xl z-50 flex flex-col">
+        <div class="flex justify-end p-4">
+            <button id="sidebar-close" aria-label="Close menu" class="p-2 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="flex flex-col px-6 pb-8 space-y-6 text-lg font-medium">
+            <a href="about.html" class="text-neutral-900 dark:text-white hover:text-brand-600 transition-colors">About</a>
+            <a href="music.html" class="text-neutral-900 dark:text-white hover:text-brand-600 transition-colors">Music</a>
+            <a href="press.html" class="text-neutral-900 dark:text-white hover:text-brand-600 transition-colors">Press</a>
+            <a href="#" class="text-brand-600 dark:text-brand-400 font-bold transition-colors">Contact</a>
+        </nav>
+    </div>
+
+    <header class="fixed top-0 w-full z-30 glass-nav border-b border-neutral-200 dark:border-neutral-800 transition-colors duration-300 overflow-x-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="text-xl font-bold tracking-tight text-neutral-900 dark:text-white flex items-center gap-2 group">
+                    <img src="res/drawables/logo.svg" alt="Erina Stella Logo" class="w-8 h-8 group-hover:scale-105 transition-transform">
+                    <span>Erina Stella</span>
+                </a>
+
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="about.html" class="text-neutral-600 hover:text-brand-600 dark:text-neutral-400 dark:hover:text-brand-400 transition-colors">About</a>
+                    <a href="music.html" class="text-neutral-600 hover:text-brand-600 dark:text-neutral-400 dark:hover:text-brand-400 transition-colors">Music</a>
+                    <a href="press.html" class="text-neutral-600 hover:text-brand-600 dark:text-neutral-400 dark:hover:text-brand-400 transition-colors">Press</a>
+                    <a href="#" class="text-brand-600 dark:text-brand-400 font-bold transition-colors">Contact</a>
+                    
+                    <button id="theme-toggle" aria-label="Toggle Dark Mode" class="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-600">
+                        <svg class="w-5 h-5"><use id="theme-icon" href="#icon-moon"></use></svg>
+                    </button>
+                </nav>
+
+                <div class="md:hidden flex items-center gap-4">
+                    <button id="theme-toggle-mobile" aria-label="Toggle Dark Mode" class="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+                        <svg class="w-5 h-5"><use id="theme-icon-mobile" href="#icon-moon"></use></svg>
+                    </button>
+                    <button id="menu-btn" aria-label="Menu" class="p-2 text-neutral-600 dark:text-neutral-400">
+                        <svg class="w-6 h-6"><use href="#icon-menu"></use></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="pt-20">
+        <section class="min-h-[40vh] flex items-center">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-3xl">
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white leading-tight mb-6">
+                        Get in <span class="text-brand-600 dark:text-brand-500">Touch</span>
+                    </h1>
+                    <p class="text-lg text-neutral-500 dark:text-neutral-400 max-w-xl">
+                        I'd love to hear from you. Whether you want to book me for an event, invite me to minister at your church, or just say hello, please fill out the form below.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-white dark:bg-neutral-950 border-t border-neutral-100 dark:border-neutral-900 transition-colors duration-300">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="rounded-2xl overflow-hidden shadow-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
+                    <iframe src="https://forms.gle/nkUmbRT7yG42NrDj7" class="w-full" style="height: 80vh; min-height: 600px;" frameborder="0" marginheight="0" marginwidth="0" title="Contact Form">Loading…</iframe>
+                </div>
+                <div class="mt-12 grid md:grid-cols-2 gap-8 text-neutral-600 dark:text-neutral-400">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-600 dark:text-brand-400 flex-shrink-0">
+                            <svg class="w-5 h-5"><use href="#icon-mail"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-neutral-900 dark:text-white mb-1">Email</h3>
+                            <a href="mailto:erinastella2025@gmail.com" class="hover:underline">hello@erinastella.com</a>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-600 dark:text-brand-400 flex-shrink-0">
+                            <svg class="w-5 h-5"><use href="#icon-map-pin"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-neutral-900 dark:text-white mb-1">Location</h3>
+                            <span>Gganda, Nansana, Wakiso, Uganda</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white dark:bg-neutral-950 py-12 border-t border-neutral-100 dark:border-neutral-900 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <img src="res/drawables/logo.svg" alt="Erina Stella Logo" class="w-6 h-6">
+                        <span class="font-bold text-neutral-900 dark:text-white tracking-tight">Erina Stella</span>
+                    </div>
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                        &copy; <span id="year"></span> Erina Stella Nakiberu. All rights reserved.
+                    </p>
+                </div>
+                <nav class="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-neutral-500 dark:text-neutral-400">
+                    <a href="about.html" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">About</a>
+                    <a href="music.html" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Music</a>
+                    <a href="press.html" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Press</a>
+                    <a href="#" class="text-brand-600 dark:text-brand-400 font-bold">Contact</a>
+                    <a href="privacy.html" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Privacy</a>
+                    <a href="terms.html" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Terms</a>
+                </nav>
+            </div>
+            <div class="flex justify-between mt-6">
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="text-neutral-500 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                    <svg class="w-5 h-5"><use href="#icon-youtube"/></svg>
+                </a>
+                <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" aria-label="Spotify" class="text-neutral-500 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                    <svg class="w-5 h-5"><use href="#icon-spotify"/></svg>
+                </a>
+                <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" aria-label="Apple Music" class="text-neutral-500 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                    <svg class="w-5 h-5"><use href="#icon-apple-music"/></svg>
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-neutral-500 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                    <svg class="w-5 h-5"><use href="#icon-instagram"/></svg>
+                </a>
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-neutral-500 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                    <svg class="w-5 h-5"><use href="#icon-facebook"/></svg>
+                </a>
+                <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X" class="text-neutral-500 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                    <svg class="w-5 h-5"><use href="#icon-twitter-x"/></svg>
+                </a>
+            </div>
+            <div class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800 text-center text-xs text-neutral-500 dark:text-neutral-400">
+                This site is protected by reCAPTCHA and the Google 
+                <a href="pp.html" class="underline hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Privacy Policy</a> and 
+                <a href="tos.html" class="underline hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Terms of Service</a> apply.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            const htmlClassList = document.documentElement.classList;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeIconMobile = document.getElementById('theme-icon-mobile');
+
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'dark') {
+                htmlClassList.add('dark');
+            } else if (storedTheme === 'light') {
+                htmlClassList.remove('dark');
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                htmlClassList.add('dark');
+            }
+
+            const updateIcons = () => {
+                const isDark = htmlClassList.contains('dark');
+                const iconHref = isDark ? '#icon-sun' : '#icon-moon';
+                themeIcon.setAttribute('href', iconHref);
+                themeIconMobile.setAttribute('href', iconHref);
+            };
+            updateIcons();
+
+            const toggleTheme = () => {
+                htmlClassList.toggle('dark');
+                const isDark = htmlClassList.contains('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateIcons();
+            };
+
+            themeToggleBtn.addEventListener('click', toggleTheme);
+            themeToggleMobileBtn.addEventListener('click', toggleTheme);
+
+            const menuBtn = document.getElementById('menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const sidebarClose = document.getElementById('sidebar-close');
+
+            const openSidebar = () => {
+                sidebar.classList.add('open');
+                sidebarOverlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeSidebar = () => {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('open');
+                document.body.style.overflow = '';
+            };
+
+            menuBtn.addEventListener('click', openSidebar);
+            sidebarClose.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        });
+    </script>
+</body>
+</html>
