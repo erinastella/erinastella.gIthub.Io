@@ -1,0 +1,23 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Erina Stella",
+  "home_page_url": "https://erinastella.github.io/",
+  "feed_url": "https://erinastella.github.io/feed.json",
+  "description": "Updates from Erina Stella — Gospel musician and teacher.",
+  "items": [
+    {
+      "id": "https://erinastella.github.io/music/worship-lesson-series",
+      "url": "https://erinastella.github.io/music/worship-lesson-series",
+      "title": "New Worship Lesson Series",
+      "content_text": "Practical lessons for choir and worship teams from Erina Stella.",
+      "date_published": "2026-07-06T10:00:00+03:00"
+    },
+    {
+      "id": "https://erinastella.github.io/events/community-concert-2026",
+      "url": "https://erinastella.github.io/events/community-concert-2026",
+      "title": "Upcoming Community Concert",
+      "content_text": "Join Erina Stella for a gospel evening with local choirs and musicians.",
+      "date_published": "2026-06-01T09:00:00+03:00"
+    }
+  ]
+}
