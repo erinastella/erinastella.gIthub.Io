@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /private/
+Sitemap: https://erinastella.github.io/sitemap.xml
+Host: erinastella.github.io
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
