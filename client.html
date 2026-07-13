@@ -207,14 +207,14 @@ function renderHeader() {
                     <a href="#/profile?tab=repositories" class="block px-4 py-2 text-gray-300 hover:bg-[#0366d6] hover:text-white">Your repositories</a>
                     <div class="border-t border-[#30363d] my-1"></div>
                     <button onclick="localStorage.removeItem('gh_pat'); window.location.reload();" class="w-full text-left block px-4 py-2 text-gray-300 hover:bg-[#0366d6] hover:text-white">Sign out / Change Token</button>
-                </div>
             </div>
         </div>
-    </header>`;
+    </div>
+</header>`;
 }
 
 function renderLogin() {
-    return `
+    document.getElementById('app').innerHTML = `
     <div class="flex-grow flex items-center justify-center bg-[#0d1117]">
         <div class="w-full max-w-sm p-6 text-center">
             <div class="flex justify-center mb-6 text-white">${ICONS.github}</div>
