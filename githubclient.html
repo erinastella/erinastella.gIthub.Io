@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Client App</title>
+    <title>GitHub Client</title>
     <script src="https://cdn.tailwindcss.com">
     </script>
     <script>
@@ -29,16 +29,19 @@
                             btnBorder: '#30363d',
                             sidebar: '#0d1117',
                             codeBg: '#161b22',
-                            toastBg: '#1a1f2b',
                         }
                     },
                     fontFamily: {
                         mono: ['SFMono-Regular', 'Consolas', '"Liberation Mono"', 'Menlo', 'Courier', 'monospace'],
-                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"Noto Sans"', 'Helvetica', 'Arial', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"'],
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"Noto Sans"', 'Helvetica', 'Arial',
+                            'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"'
+                        ],
                     }
                 }
             }
         }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.0/ace.min.js">
     </script>
     <style>
         * {
@@ -83,6 +86,8 @@
             color: #e6edf3;
             border-bottom: 1px solid #30363d;
             padding-bottom: 8px;
+            position: relative;
+            scroll-margin-top: 80px;
         }
         .markdown-body h1 {
             font-size: 2em;
@@ -92,6 +97,45 @@
         }
         .markdown-body h3 {
             font-size: 1.25em;
+        }
+        .markdown-body h4 {
+            font-size: 1em;
+        }
+        .markdown-body h5 {
+            font-size: 0.875em;
+        }
+        .markdown-body h6 {
+            font-size: 0.85em;
+            color: #8b949e;
+        }
+        .markdown-body h1:hover::before,
+        .markdown-body h2:hover::before,
+        .markdown-body h3:hover::before,
+        .markdown-body h4:hover::before,
+        .markdown-body h5:hover::before,
+        .markdown-body h6:hover::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-color: #8b949e;
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .markdown-body h1:hover::before,
+        .markdown-body h2:hover::before,
+        .markdown-body h3:hover::before,
+        .markdown-body h4:hover::before,
+        .markdown-body h5:hover::before,
+        .markdown-body h6:hover::before {
+            opacity: 0.6;
         }
         .markdown-body p {
             margin-bottom: 16px;
@@ -202,20 +246,6 @@
             align-items: center;
             justify-content: center;
         }
-        textarea.code-editor {
-            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            font-size: 13px;
-            line-height: 1.5;
-            tab-size: 4;
-            background: #0d1117;
-            color: #e6edf3;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 16px;
-            width: 100%;
-            min-height: 400px;
-            resize: vertical;
-        }
         input,
         select,
         textarea {
@@ -250,6 +280,10 @@
         .btn-primary:hover {
             background: #2ea043;
         }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .btn-secondary {
             background: #21262d;
             color: #c9d1d9;
@@ -274,6 +308,74 @@
         .btn-danger:hover {
             background: #f85149;
             color: #fff;
+        }
+        .ace-editor {
+            width: 100%;
+            min-height: 400px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            font-size: 13px;
+        }
+        .ace-editor.readonly {
+            min-height: 300px;
+        }
+        .ace_gutter {
+            background: #161b22 !important;
+            border-right: 1px solid #30363d !important;
+        }
+        .custom-radio {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #30363d;
+            border-radius: 50%;
+            background: #0d1117;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .custom-radio:checked {
+            border-color: #58a6ff;
+        }
+        .custom-radio:checked::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #58a6ff;
+        }
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #30363d;
+            border-radius: 4px;
+            background: #0d1117;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .custom-checkbox:checked {
+            border-color: #3fb950;
+            background: #3fb950;
+        }
+        .custom-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: 4px;
+            width: 6px;
+            height: 10px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
         }
     </style>
 </head>
@@ -309,6 +411,8 @@
             <symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
             <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
             <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+            <symbol id="icon-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></symbol>
+            <symbol id="icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></symbol>
         </defs>
     </svg>
     <div id="app"></div>
@@ -317,28 +421,32 @@
         (function() {
             const GH_API = 'https://api.github.com';
             const MD_API = 'https://api.github.com/markdown';
+            ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.0/');
 
-            function getToken() {
-                return localStorage.getItem('gh_pat');
+            function getToken() { return localStorage.getItem('gh_pat'); }
+
+            function setToken(t) { localStorage.setItem('gh_pat', t); }
+
+            function clearToken() { localStorage.removeItem('gh_pat'); }
+
+            function encodeBase64(str) {
+                const bytes = new TextEncoder().encode(str);
+                let binary = '';
+                bytes.forEach(b => binary += String.fromCharCode(b));
+                return btoa(binary);
             }
 
-            function setToken(t) {
-                localStorage.setItem('gh_pat', t);
+            function decodeBase64(str) {
+                try {
+                    const bytes = Uint8Array.from(atob(str), c => c.charCodeAt(0));
+                    return new TextDecoder('utf-8').decode(bytes);
+                } catch (e) { return atob(str); }
             }
-
-            function clearToken() {
-                localStorage.removeItem('gh_pat');
-            }
-
             async function apiFetch(path, options = {}) {
                 const token = getToken();
-                const headers = {
-                    'Accept': 'application/vnd.github+json',
-                    'Content-Type': 'application/json',
-                };
+                const headers = { 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' };
                 if (token) headers['Authorization'] = 'Bearer ' + token;
-                const res = await fetch(GH_API + path, { ...options, headers: { ...headers, ...(options.headers ||
-                        {}) } });
+                const res = await fetch(GH_API + path, { ...options, headers: { ...headers, ...(options.headers || {}) } });
                 if (!res.ok) {
                     const err = await res.json().catch(() => ({ message: res.statusText }));
                     throw new Error(err.message || 'API error ' + res.status);
@@ -346,7 +454,6 @@
                 if (res.status === 204) return null;
                 return res.json();
             }
-
             async function renderMarkdown(text) {
                 const res = await fetch(MD_API, {
                     method: 'POST',
@@ -363,7 +470,7 @@
                     error: 'bg-[#3a1a1a] border-[#f85149]' };
                 const toast = document.createElement('div');
                 toast.className =
-                    `${colors[type] || colors.info} border rounded-lg px-4 py-3 mb-2 text-[#e6edf3] text-sm shadow-lg flex items-center gap-2`;
+                    `${colors[type]||colors.info} border rounded-lg px-4 py-3 mb-2 text-[#e6edf3] text-sm shadow-lg flex items-center gap-2`;
                 toast.innerHTML =
                     `<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>${msg}</span>`;
                 container.appendChild(toast);
@@ -376,25 +483,71 @@
                 return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-${id}"/></svg>`;
             }
 
-            function escapeHtml(s) {
-                const d = document.createElement('div');
-                d.textContent = s;
-                return d.innerHTML;
-            }
+            function escapeHtml(s) { const d = document.createElement('div');
+                d.textContent = s; return d.innerHTML; }
 
+            function getAceMode(filename) {
+                const ext = (filename.split('.').pop() || '').toLowerCase();
+                const map = { js: 'javascript', jsx: 'javascript', ts: 'typescript', tsx: 'typescript', py: 'python',
+                    rb: 'ruby', go: 'golang', rs: 'rust', java: 'java', c: 'c_cpp', cpp: 'c_cpp', h: 'c_cpp',
+                    css: 'css', html: 'html', xml: 'xml', json: 'json', yaml: 'yaml', yml: 'yaml', md: 'markdown',
+                    sql: 'sql', sh: 'sh', bash: 'sh', php: 'php', swift: 'swift', kt: 'kotlin', scala: 'scala',
+                    vue: 'html', svelte: 'html', graphql: 'graphqlschema', dockerfile: 'dockerfile', toml: 'toml',
+                    ini: 'ini', cfg: 'ini', conf: 'ini' };
+                return map[ext] || 'text';
+            }
             let currentUser = null;
             let appEl = document.getElementById('app');
+            let aceInstances = [];
 
+            function destroyAceInstances() {
+                aceInstances.forEach(ed => { try { ed.destroy(); } catch (e) {} });
+                aceInstances = [];
+                document.querySelectorAll('.ace-editor').forEach(el => { if (el._aceEditor) { try { el._aceEditor
+                            .destroy(); } catch (e) {} delete el._aceEditor; } });
+            }
+
+            function createAceEditor(containerId, content, mode, readonly = true) {
+                destroyAceInstances();
+                const el = document.getElementById(containerId);
+                if (!el) return null;
+                el.innerHTML = '';
+                const editor = ace.edit(el, {
+                    theme: 'ace/theme/github_dark',
+                    mode: 'ace/mode/' + mode,
+                    readOnly: readonly,
+                    showPrintMargin: false,
+                    highlightActiveLine: !readonly,
+                    fontSize: '13px',
+                    fontFamily: 'SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace',
+                    useWorker: false,
+                    maxLines: readonly ? Infinity : undefined,
+                    minLines: readonly ? 10 : 20,
+                });
+                editor.setValue(content || '', -1);
+                editor.clearSelection();
+                editor.renderer.setScrollMargin(10, 10);
+                editor.renderer.setPadding(16);
+                if (readonly) {
+                    editor.container.style.minHeight = '300px';
+                    editor.renderer.$cursorLayer.element.style.display = 'none';
+                } else {
+                    editor.container.style.minHeight = '400px';
+                }
+                el._aceEditor = editor;
+                aceInstances.push(editor);
+                return editor;
+            }
+
+            function getEditorValue(containerId) {
+                const el = document.getElementById(containerId);
+                if (el && el._aceEditor) return el._aceEditor.getValue();
+                return '';
+            }
             async function loadUser() {
                 if (!getToken()) return null;
-                try {
-                    currentUser = await apiFetch('/user');
-                    return currentUser;
-                } catch (e) {
-                    clearToken();
-                    currentUser = null;
-                    return null;
-                }
+                try { currentUser = await apiFetch('/user'); return currentUser; } catch (e) { clearToken();
+                    currentUser = null; return null; }
             }
 
             function renderTokenScreen() {
@@ -409,7 +562,7 @@
             <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-6">
               <label class="block text-sm text-[#e6edf3] mb-2 font-medium">Personal Access Token</label>
               <input type="text" id="token-input" placeholder="Paste your personal access token" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-[#e6edf3] text-sm focus:border-[#58a6ff] focus:ring-2 focus:ring-[#58a6ff]/20 outline-none" autocomplete="off">
-              <p class="text-xs text-[#8b949e] mt-2">Tokens must have <code class="text-[#58a6ff]">repo</code>, <code class="text-[#58a6ff]">user</code>, and <code class="text-[#58a6ff]">delete_repo</code> scopes.</p>
+              <p class="text-xs text-[#8b949e] mt-2">Tokens need <code class="text-[#58a6ff]">repo</code>, <code class="text-[#58a6ff]">user</code>, <code class="text-[#58a6ff]">delete_repo</code> scopes.</p>
               <button id="save-token-btn" class="btn-primary w-full mt-4 py-2">Save token</button>
               <p id="token-error" class="text-[#f85149] text-xs mt-2 hidden"></p>
             </div>
@@ -422,13 +575,10 @@
                         errEl.classList.remove('hidden'); return; }
                     setToken(val);
                     const user = await loadUser();
-                    if (!user) {
-                        clearToken();
+                    if (!user) { clearToken();
                         errEl.textContent =
                             'Invalid token. Please check your token and ensure it has the required scopes.';
-                        errEl.classList.remove('hidden');
-                        return;
-                    }
+                        errEl.classList.remove('hidden'); return; }
                     errEl.classList.add('hidden');
                     window.location.hash = '#/dashboard';
                     navigate();
@@ -440,9 +590,9 @@
                 const username = currentUser ? currentUser.login : '';
                 return `
         <header class="bg-[#161b22] border-b border-[#30363d] sticky top-0 z-50">
-          <div class="max-w-7xl mx-auto px-4 h-14 flex items-center gap-3">
+          <div class="max-w-7xl mx-auto px-3 sm:px-4 h-14 flex items-center gap-2 sm:gap-3">
             <a href="#/dashboard" class="flex items-center gap-2 text-[#e6edf3] hover:text-[#c9d1d9] transition-colors flex-shrink-0">
-              <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
             </a>
             <div class="flex-1 max-w-md relative">
               <form id="header-search-form" class="w-full">
@@ -452,12 +602,12 @@
                 </div>
               </form>
             </div>
-            <div class="flex items-center gap-2 flex-shrink-0">
-              <a href="#/dashboard" class="btn-secondary text-sm flex items-center gap-1 px-3 py-1.5">
+            <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+              <a href="#/dashboard" class="btn-secondary text-sm flex items-center gap-1 px-2 sm:px-3 py-1.5">
                 ${icon('repo','w-4 h-4')} <span class="hidden sm:inline">Dashboard</span>
               </a>
               <div class="dropdown relative">
-                <button class="btn-secondary text-sm flex items-center gap-1 px-3 py-1.5" id="user-menu-btn">
+                <button class="btn-secondary text-sm flex items-center gap-1 px-2 sm:px-3 py-1.5" id="user-menu-btn">
                   <img src="${avatarUrl}" alt="" class="w-5 h-5 rounded-full" onerror="this.style.display='none'">
                   <span class="hidden sm:inline">${escapeHtml(username)}</span>
                   <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -478,36 +628,49 @@
                 const userMenuBtn = document.getElementById('user-menu-btn');
                 const userDropdown = document.getElementById('user-dropdown');
                 if (userMenuBtn && userDropdown) {
-                    userMenuBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        userDropdown.parentElement.classList.toggle('active');
-                    });
-                    document.addEventListener('click', () => {
-                        userDropdown.parentElement.classList.remove('active');
-                    });
+                    userMenuBtn.addEventListener('click', (e) => { e.stopPropagation();
+                        userDropdown.parentElement.classList.toggle('active'); });
+                    document.addEventListener('click', () => { userDropdown.parentElement.classList.remove('active'); });
                 }
-                document.getElementById('change-token-btn')?.addEventListener('click', () => {
-                    clearToken();
+                document.getElementById('change-token-btn')?.addEventListener('click', () => { clearToken();
                     currentUser = null;
                     window.location.hash = '';
-                    renderTokenScreen();
-                });
-                document.getElementById('header-search-form')?.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const q = document.getElementById('header-search-input').value.trim();
-                    if (q) window.location.hash = '#/search?q=' + encodeURIComponent(q);
-                });
+                    renderTokenScreen(); });
+                document.getElementById('header-search-form')?.addEventListener('submit', (e) => { e.preventDefault();
+                    const q = document.getElementById('header-search-input').value.trim(); if (q) window.location
+                        .hash = '#/search?q=' + encodeURIComponent(q); });
+            }
+
+            function renderFileTree(contents, owner, repoName, branch, basePath, limitAll = false) {
+                if (!Array.isArray(contents)) return '<p class="px-4 py-3 text-sm text-[#8b949e]">Empty directory</p>';
+                const dirs = contents.filter(c => c.type === 'dir').sort((a, b) => a.name.localeCompare(b.name));
+                const files = contents.filter(c => c.type === 'file').sort((a, b) => a.name.localeCompare(b.name));
+                const all = [...dirs, ...files];
+                const showLimit = !limitAll && all.length > 7;
+                const displayItems = showLimit ? all.slice(0, 7) : all;
+                let html = displayItems.map(item => {
+                    const fullPath = basePath ? basePath + '/' + item.name : item.name;
+                    if (item.type === 'dir') {
+                        return `<a href="#/${owner}/${repoName}/tree/${branch}/${encodeURIComponent(fullPath)}" class="file-row flex items-center gap-2 px-4 py-2 text-sm text-[#58a6ff] hover:text-[#79c0ff] border-b border-[#30363d]/50 last:border-b-0 transition-colors">
+              ${icon('folder','w-4 h-4 text-[#58a6ff] flex-shrink-0')} ${escapeHtml(item.name)}
+            </a>`;
+                    }
+                    return `<a href="#/${owner}/${repoName}/tree/${branch}/${encodeURIComponent(fullPath)}" class="file-row flex items-center gap-2 px-4 py-2 text-sm text-[#e6edf3] hover:text-[#c9d1d9] border-b border-[#30363d]/50 last:border-b-0 transition-colors">
+              ${icon('file','w-4 h-4 text-[#8b949e] flex-shrink-0')} ${escapeHtml(item.name)}
+            </a>`;
+                }).join('');
+                if (showLimit) {
+                    html +=
+                        `<button class="show-all-files w-full text-center px-4 py-2 text-sm text-[#58a6ff] hover:bg-[#1f2428] transition-colors border-t border-[#30363d]" data-owner="${owner}" data-repo="${repoName}" data-branch="${branch}" data-path="${basePath}">Show all ${all.length} files</button>`;
+                }
+                return html;
             }
 
             async function renderDashboard() {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 const repos = await apiFetch('/user/repos?sort=updated&per_page=30&type=all').catch(() => []);
                 const orgs = await apiFetch('/user/orgs').catch(() => []);
-                const starsCount = await apiFetch('/user/starred?per_page=1').then(r => {
-                    const link = r.headers?.get?.('link') || '';
-                    const m = link.match(/page=(\d+)>; rel="last"/);
-                    return m ? parseInt(m[1]) : (Array.isArray(r) ? r.length : 0);
-                }).catch(() => 0);
                 appEl.innerHTML = `
         ${renderHeader()}
         <div class="max-w-7xl mx-auto px-4 py-6 flex gap-6">
@@ -535,10 +698,10 @@
           <main class="flex-1 min-w-0">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-semibold text-[#e6edf3]">Recent repositories</h2>
-              <a href="#/dashboard" class="btn-secondary text-sm flex items-center gap-1">${icon('plus','w-4 h-4')} New</a>
+              <a href="#/dashboard" class="btn-secondary text-sm flex items-center gap-1">${icon('plus','w-4 h-4')} <span class="hidden sm:inline">New</span></a>
             </div>
             <div class="space-y-3">
-              ${repos.length === 0 ? '<p class="text-[#8b949e] text-sm">No repositories found. Create one to get started.</p>' : ''}
+              ${repos.length===0?'<p class="text-[#8b949e] text-sm">No repositories found. Create one to get started.</p>':''}
               ${repos.map(repo => `
               <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 hover:border-[#58a6ff]/30 transition-colors">
                 <div class="flex items-start justify-between gap-3">
@@ -546,18 +709,18 @@
                     <div class="flex items-center gap-2 mb-1">
                       <svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                       <a href="#/${repo.full_name}" class="text-[#58a6ff] font-semibold text-sm hover:underline truncate">${escapeHtml(repo.full_name)}</a>
-                      <span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e] flex-shrink-0">${repo.private ? 'Private' : 'Public'}</span>
+                      <span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e] flex-shrink-0">${repo.private?'Private':'Public'}</span>
                     </div>
-                    <p class="text-xs text-[#8b949e] mb-2 line-clamp-2">${escapeHtml(repo.description || 'No description')}</p>
+                    <p class="text-xs text-[#8b949e] mb-2 line-clamp-2">${escapeHtml(repo.description||'No description')}</p>
                     <div class="flex items-center gap-3 text-xs text-[#8b949e]">
-                      ${repo.language ? `<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#58a6ff]"></span>${escapeHtml(repo.language)}</span>` : ''}
+                      ${repo.language?`<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#58a6ff]"></span>${escapeHtml(repo.language)}</span>`:''}
                       <span class="flex items-center gap-1">${icon('star','w-3.5 h-3.5')} ${repo.stargazers_count}</span>
                       <span class="flex items-center gap-1">${icon('fork','w-3.5 h-3.5')} ${repo.forks_count}</span>
                       <span class="text-xs">Updated ${new Date(repo.updated_at).toLocaleDateString()}</span>
                     </div>
                   </div>
                   <div class="flex items-center gap-1 flex-shrink-0">
-                    <button class="btn-secondary text-xs px-2 py-1 star-btn flex items-center gap-1" data-owner="${repo.owner.login}" data-repo="${repo.name}">${icon('star','w-3.5 h-3.5')} Star</button>
+                    <button class="btn-secondary text-xs px-2 py-1 star-btn flex items-center gap-1" data-owner="${repo.owner.login}" data-repo="${repo.name}">${icon('star','w-3.5 h-3.5')} <span class="hidden sm:inline">Star</span></button>
                   </div>
                 </div>
               </div>`).join('')}
@@ -573,14 +736,14 @@
                             await apiFetch(`/user/starred/${owner}/${repo}`, { method: 'PUT' });
                             showToast('Starred ' + owner + '/' + repo, 'success');
                             btn.innerHTML =
-                                `${icon('star','w-3.5 h-3.5')} Starred`;
+                                `${icon('star','w-3.5 h-3.5')} <span class="hidden sm:inline">Starred</span>`;
                             btn.classList.add('bg-[#1a3a2a]');
                         } catch (e) {
                             if (e.message.includes('304')) {
                                 await apiFetch(`/user/starred/${owner}/${repo}`, { method: 'DELETE' });
                                 showToast('Unstarred ' + owner + '/' + repo, 'info');
                                 btn.innerHTML =
-                                    `${icon('star','w-3.5 h-3.5')} Star`;
+                                    `${icon('star','w-3.5 h-3.5')} <span class="hidden sm:inline">Star</span>`;
                                 btn.classList.remove('bg-[#1a3a2a]');
                             } else { showToast(e.message, 'error'); }
                         }
@@ -590,6 +753,7 @@
 
             async function renderRepoPage(owner, repoName) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 try {
                     const repo = await apiFetch(`/repos/${owner}/${repoName}`);
                     const defaultBranch = repo.default_branch;
@@ -598,7 +762,7 @@
                     let readmeHtml = '';
                     try {
                         const readme = await apiFetch(`/repos/${owner}/${repoName}/readme?ref=${defaultBranch}`);
-                        const rawContent = atob(readme.content);
+                        const rawContent = decodeBase64(readme.content);
                         readmeHtml = await renderMarkdown(rawContent);
                     } catch (e) {}
                     let subData = null;
@@ -607,25 +771,25 @@
                     () => false);
                     appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-7xl mx-auto px-4 py-4">
-          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
-            <div class="flex items-start justify-between flex-wrap gap-3">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4">
+          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-3 sm:p-4 mb-4">
+            <div class="flex items-start justify-between flex-wrap gap-2 sm:gap-3">
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-1 flex-wrap">
                   <svg class="w-5 h-5 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                  <a href="#/${owner}" class="text-[#58a6ff] hover:underline text-lg font-semibold">${escapeHtml(owner)}</a>
-                  <span class="text-[#8b949e] text-lg">/</span>
-                  <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline text-lg font-semibold">${escapeHtml(repoName)}</a>
-                  <span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e]">${repo.private ? 'Private' : 'Public'}</span>
+                  <a href="#/${owner}" class="text-[#58a6ff] hover:underline text-base sm:text-lg font-semibold">${escapeHtml(owner)}</a>
+                  <span class="text-[#8b949e] text-base sm:text-lg">/</span>
+                  <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline text-base sm:text-lg font-semibold">${escapeHtml(repoName)}</a>
+                  <span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e]">${repo.private?'Private':'Public'}</span>
                 </div>
-                <p class="text-sm text-[#8b949e]">${escapeHtml(repo.description || '')}</p>
+                <p class="text-sm text-[#8b949e]">${escapeHtml(repo.description||'')}</p>
               </div>
-              <div class="flex items-center gap-2 flex-shrink-0 flex-wrap">
-                <button id="star-toggle-btn" class="btn-secondary text-sm flex items-center gap-1 ${isStarred ? 'bg-[#1a3a2a]' : ''}">${icon('star','w-4 h-4')} <span>${isStarred ? 'Starred' : 'Star'}</span> <span class="text-xs text-[#8b949e]">${repo.stargazers_count}</span></button>
-                <button id="watch-btn" class="btn-secondary text-sm flex items-center gap-1">${icon('eye','w-4 h-4')} <span>${subData?.subscribed ? 'Watching' : 'Watch'}</span> <span class="text-xs text-[#8b949e]">${repo.subscribers_count}</span></button>
-                <button id="fork-btn" class="btn-secondary text-sm flex items-center gap-1">${icon('fork','w-4 h-4')} Fork <span class="text-xs text-[#8b949e]">${repo.forks_count}</span></button>
+              <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0 flex-wrap">
+                <button id="star-toggle-btn" class="btn-secondary text-sm flex items-center gap-1 ${isStarred?'bg-[#1a3a2a]':''}">${icon('star','w-4 h-4')} <span class="hidden sm:inline">${isStarred?'Starred':'Star'}</span> <span class="text-xs text-[#8b949e]">${repo.stargazers_count}</span></button>
+                <button id="watch-btn" class="btn-secondary text-sm flex items-center gap-1">${icon('eye','w-4 h-4')} <span class="hidden sm:inline">${subData?.subscribed?'Watching':'Watch'}</span> <span class="text-xs text-[#8b949e]">${repo.subscribers_count}</span></button>
+                <button id="fork-btn" class="btn-secondary text-sm flex items-center gap-1">${icon('fork','w-4 h-4')} <span class="hidden sm:inline">Fork</span> <span class="text-xs text-[#8b949e]">${repo.forks_count}</span></button>
                 <div class="dropdown relative">
-                  <button class="btn-secondary text-sm flex items-center gap-1">${icon('download','w-4 h-4')} File ${icon('chevron-down','w-3 h-3')}</button>
+                  <button class="btn-secondary text-sm flex items-center gap-1">${icon('download','w-4 h-4')} <span class="hidden sm:inline">File</span> ${icon('chevron-down','w-3 h-3')}</button>
                   <div class="dropdown-content absolute right-0 mt-2 w-64 bg-[#161b22] border border-[#30363d] rounded-lg shadow-xl py-1 z-50">
                     <button class="w-full text-left px-4 py-2 text-sm text-[#e6edf3] hover:bg-[#1f2428] flex items-center gap-2" id="download-zip-btn">${icon('download','w-4 h-4')} Download ZIP</button>
                     <button class="w-full text-left px-4 py-2 text-sm text-[#e6edf3] hover:bg-[#1f2428] flex items-center gap-2" id="copy-clone-btn">${icon('copy','w-4 h-4')} Copy clone URL</button>
@@ -633,13 +797,13 @@
                   </div>
                 </div>
                 <div class="dropdown relative">
-                  <button class="btn-secondary text-sm flex items-center gap-1">${icon('edit','w-4 h-4')} Edit ${icon('chevron-down','w-3 h-3')}</button>
+                  <button class="btn-secondary text-sm flex items-center gap-1">${icon('edit','w-4 h-4')} <span class="hidden sm:inline">Edit</span> ${icon('chevron-down','w-3 h-3')}</button>
                   <div class="dropdown-content absolute right-0 mt-2 w-56 bg-[#161b22] border border-[#30363d] rounded-lg shadow-xl py-1 z-50">
                     <a href="#/${owner}/${repoName}/upload/${defaultBranch}" class="block px-4 py-2 text-sm text-[#e6edf3] hover:bg-[#1f2428] flex items-center gap-2">${icon('upload','w-4 h-4')} Upload files</a>
                     <a href="#/${owner}/${repoName}/new/${defaultBranch}" class="block px-4 py-2 text-sm text-[#e6edf3] hover:bg-[#1f2428] flex items-center gap-2">${icon('plus','w-4 h-4')} New file</a>
                   </div>
                 </div>
-                <a href="#/${owner}/${repoName}/settings" class="btn-secondary text-sm flex items-center gap-1">${icon('settings','w-4 h-4')} Settings</a>
+                <a href="#/${owner}/${repoName}/settings" class="btn-secondary text-sm flex items-center gap-1">${icon('settings','w-4 h-4')} <span class="hidden sm:inline">Settings</span></a>
               </div>
             </div>
           </div>
@@ -654,17 +818,17 @@
                   ${renderFileTree(contents, owner, repoName, defaultBranch, '')}
                 </div>
               </div>
-              ${readmeHtml ? `
-              <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-6">
+              ${readmeHtml?`
+              <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 sm:p-6">
                 <div class="markdown-body" id="readme-content">${readmeHtml}</div>
-              </div>` : ''}
+              </div>`:''}
             </div>
             <div class="w-full lg:w-72 flex-shrink-0">
               <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 sticky top-20">
                 <h3 class="text-sm font-semibold text-[#e6edf3] mb-3">About</h3>
-                ${repo.description ? `<p class="text-sm text-[#8b949e] mb-3">${escapeHtml(repo.description)}</p>` : ''}
-                ${repo.homepage ? `<p class="text-sm mb-2"><a href="${repo.homepage}" target="_blank" class="text-[#58a6ff] hover:underline flex items-center gap-1">${icon('globe','w-4 h-4')} ${escapeHtml(repo.homepage)}</a></p>` : ''}
-                ${repo.license ? `<p class="text-sm text-[#8b949e] mb-2 flex items-center gap-1">${icon('book','w-4 h-4')} ${escapeHtml(repo.license.spdx_id || repo.license.name)}</p>` : ''}
+                ${repo.description?`<p class="text-sm text-[#8b949e] mb-3">${escapeHtml(repo.description)}</p>`:''}
+                ${repo.homepage?`<p class="text-sm mb-2"><a href="${repo.homepage}" target="_blank" rel="noopener" class="text-[#58a6ff] hover:underline flex items-center gap-1">${icon('globe','w-4 h-4')} ${escapeHtml(repo.homepage)}</a></p>`:''}
+                ${repo.license?`<p class="text-sm text-[#8b949e] mb-2 flex items-center gap-1">${icon('book','w-4 h-4')} ${escapeHtml(repo.license.spdx_id||repo.license.name)}</p>`:''}
                 <p class="text-sm text-[#8b949e] mb-2 flex items-center gap-1">${icon('star','w-4 h-4')} ${repo.stargazers_count} stars</p>
                 <p class="text-sm text-[#8b949e] mb-2 flex items-center gap-1">${icon('eye','w-4 h-4')} ${repo.subscribers_count} watching</p>
                 <p class="text-sm text-[#8b949e] mb-2 flex items-center gap-1">${icon('fork','w-4 h-4')} ${repo.forks_count} forks</p>
@@ -675,6 +839,8 @@
         </div>`;
                     bindHeaderEvents();
                     bindRepoPageEvents(owner, repoName, repo, defaultBranch, isStarred, subData);
+                    bindMarkdownLinks(owner, repoName, defaultBranch);
+                    bindShowAllFiles();
                 } catch (e) {
                     appEl.innerHTML =
                         `${renderHeader()}<div class="max-w-7xl mx-auto px-4 py-10 text-center"><p class="text-[#f85149]">Error loading repository: ${escapeHtml(e.message)}</p><a href="#/dashboard" class="btn-secondary mt-4 inline-block">Back to dashboard</a></div>`;
@@ -682,22 +848,46 @@
                 }
             }
 
-            function renderFileTree(contents, owner, repoName, branch, basePath) {
-                if (!Array.isArray(contents)) return '<p class="px-4 py-3 text-sm text-[#8b949e]">Empty directory</p>';
-                const dirs = contents.filter(c => c.type === 'dir').sort((a, b) => a.name.localeCompare(b.name));
-                const files = contents.filter(c => c.type === 'file').sort((a, b) => a.name.localeCompare(b.name));
-                const all = [...dirs, ...files];
-                return all.map(item => {
-                    const fullPath = basePath ? basePath + '/' + item.name : item.name;
-                    if (item.type === 'dir') {
-                        return `<a href="#/${owner}/${repoName}/tree/${branch}/${fullPath}" class="file-row flex items-center gap-2 px-4 py-2 text-sm text-[#58a6ff] hover:text-[#79c0ff] border-b border-[#30363d]/50 last:border-b-0 transition-colors">
-              ${icon('folder','w-4 h-4 text-[#58a6ff] flex-shrink-0')} ${escapeHtml(item.name)}
-            </a>`;
+            function bindMarkdownLinks(owner, repoName, branch) {
+                const mdContainer = document.getElementById('readme-content');
+                if (!mdContainer) return;
+                mdContainer.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (!link) return;
+                    const href = link.getAttribute('href');
+                    if (!href) return;
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith(
+                            'mailto:') || href.startsWith('#')) return;
+                    e.preventDefault();
+                    if (href.startsWith('./')) {
+                        const cleanPath = href.slice(2);
+                        window.location.hash = `#/${owner}/${repoName}/tree/${branch}/${encodeURIComponent(cleanPath)}`;
+                    } else if (href.startsWith('/')) {
+                        window.location.hash = '#' + href;
+                    } else {
+                        window.location.hash =
+                            `#/${owner}/${repoName}/tree/${branch}/${encodeURIComponent(href)}`;
                     }
-                    return `<a href="#/${owner}/${repoName}/tree/${branch}/${fullPath}" class="file-row flex items-center gap-2 px-4 py-2 text-sm text-[#e6edf3] hover:text-[#c9d1d9] border-b border-[#30363d]/50 last:border-b-0 transition-colors">
-              ${icon('file','w-4 h-4 text-[#8b949e] flex-shrink-0')} ${escapeHtml(item.name)}
-            </a>`;
-                }).join('');
+                    navigate();
+                });
+            }
+
+            function bindShowAllFiles() {
+                document.querySelectorAll('.show-all-files').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const owner = this.dataset.owner;
+                        const repoName = this.dataset.repo;
+                        const branch = this.dataset.branch;
+                        const path = this.dataset.path;
+                        const contents = await apiFetch(
+                            `/repos/${owner}/${repoName}/contents/${path}?ref=${branch}`).catch(
+                            () => []);
+                        const container = this.parentElement;
+                        container.innerHTML = renderFileTree(contents, owner, repoName, branch,
+                        path, true);
+                        bindShowAllFiles();
+                    });
+                });
             }
 
             function bindRepoPageEvents(owner, repoName, repo, defaultBranch, isStarred, subData) {
@@ -708,13 +898,13 @@
                             await apiFetch(`/user/starred/${owner}/${repoName}`, { method: 'DELETE' });
                             isStarred = false;
                             showToast('Unstarred', 'info');
-                            btn.querySelector('span').textContent = 'Star';
+                            btn.querySelector('span.hidden.sm\\:inline').textContent = 'Star';
                             btn.classList.remove('bg-[#1a3a2a]');
                         } else {
                             await apiFetch(`/user/starred/${owner}/${repoName}`, { method: 'PUT' });
                             isStarred = true;
                             showToast('Starred!', 'success');
-                            btn.querySelector('span').textContent = 'Starred';
+                            btn.querySelector('span.hidden.sm\\:inline').textContent = 'Starred';
                             btn.classList.add('bg-[#1a3a2a]');
                         }
                     } catch (e) { showToast(e.message, 'error'); }
@@ -737,7 +927,8 @@
                             showToast('Watching!', 'success');
                         }
                         const btn = document.getElementById('watch-btn');
-                        btn.querySelector('span').textContent = subData?.subscribed ? 'Watching' : 'Watch';
+                        const spanEl = btn.querySelector('span.hidden.sm\\:inline');
+                        if (spanEl) spanEl.textContent = subData?.subscribed ? 'Watching' : 'Watch';
                     } catch (e) { showToast(e.message, 'error'); }
                 });
                 document.getElementById('fork-btn')?.addEventListener('click', async () => {
@@ -749,8 +940,7 @@
                     } catch (e) { showToast(e.message, 'error'); }
                 });
                 document.getElementById('download-zip-btn')?.addEventListener('click', () => {
-                    window.open(
-                        `https://github.com/${owner}/${repoName}/archive/refs/heads/${defaultBranch}.zip`,
+                    window.open(`https://github.com/${owner}/${repoName}/archive/refs/heads/${defaultBranch}.zip`,
                         '_blank');
                 });
                 document.getElementById('copy-clone-btn')?.addEventListener('click', () => {
@@ -765,92 +955,76 @@
                     const btn = d.querySelector('button');
                     const content = d.querySelector('.dropdown-content');
                     if (btn && content) {
-                        btn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            const isActive = d.classList.contains('active');
-                            document.querySelectorAll('.dropdown.active').forEach(dd => dd
-                                .classList.remove('active'));
-                            if (!isActive) d.classList.add('active');
-                        });
+                        btn.addEventListener('click', (e) => { e.stopPropagation(); const isActive = d.classList
+                                .contains('active');
+                            document.querySelectorAll('.dropdown.active').forEach(dd => dd.classList
+                                .remove('active')); if (!isActive) d.classList.add('active'); });
                     }
                 });
-                document.addEventListener('click', () => {
-                    document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove(
-                        'active'));
-                });
+                document.addEventListener('click', () => { document.querySelectorAll('.dropdown.active').forEach(d => d
+                        .classList.remove('active')); });
             }
 
             async function renderTreePage(owner, repoName, branch, path) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 try {
                     const repo = await apiFetch(`/repos/${owner}/${repoName}`);
-                    const contents = await apiFetch(
-                        `/repos/${owner}/${repoName}/contents/${path}?ref=${branch}`);
+                    const contents = await apiFetch(`/repos/${owner}/${repoName}/contents/${path}?ref=${branch}`);
                     if (Array.isArray(contents)) {
                         const pathParts = path.split('/');
                         const breadcrumbs = [];
                         let accum = '';
-                        pathParts.forEach((p, i) => {
-                            accum += (accum ? '/' : '') + p;
-                            breadcrumbs.push({ name: p, path: accum, last: i === pathParts.length -
-                                    1 });
-                        });
+                        pathParts.forEach((p, i) => { accum += (accum ? '/' : '') + p;
+                            breadcrumbs.push({ name: p, path: accum, last: i === pathParts.length - 1 }); });
                         appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-7xl mx-auto px-4 py-4">
-          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4">
+          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-3 sm:p-4 mb-4">
             <div class="flex items-center gap-2 text-sm flex-wrap">
               <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a>
-              <span class="text-[#8b949e]">/</span>
-              <span class="text-[#8b949e]">tree</span>
-              <span class="text-[#8b949e]">/</span>
+              <span class="text-[#8b949e]">/</span><span class="text-[#8b949e]">tree</span><span class="text-[#8b949e]">/</span>
               <a href="#/${owner}/${repoName}/tree/${branch}" class="text-[#58a6ff] hover:underline">${escapeHtml(branch)}</a>
-              ${breadcrumbs.map(bc => `
-                <span class="text-[#8b949e]">/</span>
-                ${bc.last ? `<span class="text-[#e6edf3] font-semibold">${escapeHtml(bc.name)}</span>` : `<a href="#/${owner}/${repoName}/tree/${branch}/${bc.path}" class="text-[#58a6ff] hover:underline">${escapeHtml(bc.name)}</a>`}
-              `).join('')}
+              ${breadcrumbs.map(bc=>`<span class="text-[#8b949e]">/</span>${bc.last?`<span class="text-[#e6edf3] font-semibold">${escapeHtml(bc.name)}</span>`:`<a href="#/${owner}/${repoName}/tree/${branch}/${encodeURIComponent(bc.path)}" class="text-[#58a6ff] hover:underline">${escapeHtml(bc.name)}</a>`}`).join('')}
             </div>
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg overflow-hidden">
-            <div class="px-4 py-3 border-b border-[#30363d] flex items-center gap-2 text-sm text-[#e6edf3]">
-              ${icon('branch','w-4 h-4')} <span class="font-semibold">${escapeHtml(branch)}</span>
-            </div>
+            <div class="px-4 py-3 border-b border-[#30363d] flex items-center gap-2 text-sm text-[#e6edf3]">${icon('branch','w-4 h-4')} <span class="font-semibold">${escapeHtml(branch)}</span></div>
             ${renderFileTree(contents, owner, repoName, branch, path)}
           </div>
         </div>`;
+                        bindHeaderEvents();
+                        bindShowAllFiles();
                     } else {
-                        let fileContent = '';
-                        try {
-                            fileContent = atob(contents.content);
-                        } catch (e) {}
-                        const ext = (path.split('.').pop() || '').toLowerCase();
-                        const codeExts = ['js', 'ts', 'jsx', 'tsx', 'py', 'rb', 'go', 'rs', 'java', 'c', 'cpp',
-                            'h', 'css', 'html', 'json', 'xml', 'yaml', 'yml', 'md', 'sh', 'bash', 'sql',
-                            'graphql', 'vue', 'svelte'
-                        ];
-                        const isCode = codeExts.includes(ext) || !ext;
+                        const fileContent = decodeBase64(contents.content);
+                        const fileName = path.split('/').pop();
+                        const mode = getAceMode(fileName);
                         appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-7xl mx-auto px-4 py-4">
-          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
-            <div class="flex items-center gap-2 text-sm flex-wrap">
-              <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a>
-              <span class="text-[#8b949e]">/</span>
-              <span class="text-[#e6edf3] font-semibold">${escapeHtml(path.split('/').pop())}</span>
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4">
+          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-3 sm:p-4 mb-4">
+            <div class="flex items-center gap-2 text-sm flex-wrap justify-between">
+              <div class="flex items-center gap-2">
+                <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a>
+                <span class="text-[#8b949e]">/</span><span class="text-[#e6edf3] font-semibold">${escapeHtml(fileName)}</span>
+              </div>
+              <span class="text-xs text-[#8b949e]">${contents.size} bytes</span>
             </div>
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg overflow-hidden mb-4">
-            <div class="px-4 py-2 border-b border-[#30363d] flex items-center justify-between">
+            <div class="px-4 py-2 border-b border-[#30363d] flex items-center justify-between flex-wrap gap-2">
               <span class="text-sm text-[#8b949e]">${contents.size} bytes</span>
-              <a href="#/${owner}/${repoName}/edit/${branch}/${path}" class="btn-secondary text-xs flex items-center gap-1">${icon('edit','w-3 h-3')} Edit this file</a>
+              <div class="flex items-center gap-2">
+                <a href="#/${owner}/${repoName}/edit/${branch}/${encodeURIComponent(path)}" class="btn-secondary text-xs flex items-center gap-1">${icon('edit','w-3 h-3')} Edit</a>
+                <a href="#/${owner}/${repoName}/delete/${branch}/${encodeURIComponent(path)}" class="btn-secondary text-xs flex items-center gap-1 text-[#f85149]">${icon('trash','w-3 h-3')} Delete</a>
+              </div>
             </div>
-            <div class="p-0">
-              ${isCode ? `<pre class="overflow-x-auto p-4"><code class="text-sm font-mono text-[#e6edf3]">${escapeHtml(fileContent)}</code></pre>` : `<div class="p-4 text-sm text-[#e6edf3]">${escapeHtml(fileContent)}</div>`}
-            </div>
+            <div id="ace-viewer" class="ace-editor readonly"></div>
           </div>
         </div>`;
+                        bindHeaderEvents();
+                        setTimeout(() => { createAceEditor('ace-viewer', fileContent, mode, true); }, 100);
                     }
-                    bindHeaderEvents();
                 } catch (e) {
                     appEl.innerHTML =
                         `${renderHeader()}<div class="max-w-7xl mx-auto px-4 py-10 text-center"><p class="text-[#f85149]">Error: ${escapeHtml(e.message)}</p></div>`;
@@ -860,42 +1034,44 @@
 
             async function renderEditPage(owner, repoName, branch, path) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 try {
                     const contents = await apiFetch(`/repos/${owner}/${repoName}/contents/${path}?ref=${branch}`);
-                    const fileContent = atob(contents.content);
+                    const fileContent = decodeBase64(contents.content);
                     const sha = contents.sha;
+                    const fileName = path.split('/').pop();
+                    const mode = getAceMode(fileName);
                     appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-4">
-          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-4">
+          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-3 sm:p-4 mb-4">
             <div class="flex items-center gap-2 text-sm flex-wrap mb-3">
               <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a>
-              <span class="text-[#8b949e]">/</span>
-              <span class="text-[#e6edf3]">Editing</span>
-              <span class="text-[#8b949e]">/</span>
-              <span class="text-[#e6edf3] font-semibold">${escapeHtml(path)}</span>
+              <span class="text-[#8b949e]">/</span><span class="text-[#e6edf3]">Editing</span><span class="text-[#8b949e]">/</span>
+              <span class="text-[#e6edf3] font-semibold">${escapeHtml(fileName)}</span>
               <span class="text-xs text-[#8b949e]">on branch ${escapeHtml(branch)}</span>
             </div>
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
             <label class="block text-sm text-[#e6edf3] mb-2 font-medium">File content</label>
-            <textarea id="file-editor" class="code-editor">${escapeHtml(fileContent)}</textarea>
+            <div id="ace-editor-edit" class="ace-editor"></div>
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
             <label class="block text-sm text-[#e6edf3] mb-2 font-medium">Commit message</label>
-            <input type="text" id="commit-message" class="w-full" placeholder="Update ${escapeHtml(path.split('/').pop())}" value="Update ${escapeHtml(path.split('/').pop())}">
+            <input type="text" id="commit-message" class="w-full" placeholder="Update ${escapeHtml(fileName)}" value="Update ${escapeHtml(fileName)}">
             <label class="block text-sm text-[#e6edf3] mb-2 mt-3 font-medium">Branch</label>
             <input type="text" id="commit-branch" class="w-full" value="${escapeHtml(branch)}" placeholder="Branch name">
           </div>
           <div class="flex items-center gap-3">
             <button id="commit-btn" class="btn-primary">Commit changes</button>
-            <a href="#/${owner}/${repoName}/tree/${branch}/${path.split('/').slice(0,-1).join('/')}" class="btn-secondary">Cancel</a>
+            <a href="#/${owner}/${repoName}/tree/${branch}/${encodeURIComponent(path.split('/').slice(0,-1).join('/'))}" class="btn-secondary">Cancel</a>
           </div>
           <p id="edit-error" class="text-[#f85149] text-sm mt-2 hidden"></p>
         </div>`;
                     bindHeaderEvents();
+                    setTimeout(() => { createAceEditor('ace-editor-edit', fileContent, mode, false); }, 100);
                     document.getElementById('commit-btn').addEventListener('click', async () => {
-                        const newContent = document.getElementById('file-editor').value;
+                        const newContent = getEditorValue('ace-editor-edit');
                         const message = document.getElementById('commit-message').value.trim();
                         const commitBranch = document.getElementById('commit-branch').value.trim();
                         const errEl = document.getElementById('edit-error');
@@ -906,21 +1082,15 @@
                         try {
                             await apiFetch(`/repos/${owner}/${repoName}/contents/${path}`, {
                                 method: 'PUT',
-                                body: JSON.stringify({
-                                    message,
-                                    content: btoa(unescape(encodeURIComponent(newContent))),
-                                    sha,
-                                    branch: commitBranch,
-                                }),
+                                body: JSON.stringify({ message, content: encodeBase64(newContent),
+                                    sha, branch: commitBranch }),
                             });
                             showToast('File updated successfully!', 'success');
                             window.location.hash =
-                                `#/${owner}/${repoName}/tree/${commitBranch}/${path}`;
+                                `#/${owner}/${repoName}/tree/${commitBranch}/${encodeURIComponent(path)}`;
                             navigate();
-                        } catch (e) {
-                            errEl.textContent = e.message;
-                            errEl.classList.remove('hidden');
-                        }
+                        } catch (e) { errEl.textContent = e.message;
+                            errEl.classList.remove('hidden'); }
                     });
                 } catch (e) {
                     appEl.innerHTML =
@@ -931,49 +1101,46 @@
 
             async function renderDeletePage(owner, repoName, branch, path) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 try {
                     const contents = await apiFetch(`/repos/${owner}/${repoName}/contents/${path}?ref=${branch}`);
-                    const fileContent = atob(contents.content);
+                    const fileContent = decodeBase64(contents.content);
                     const sha = contents.sha;
+                    const fileName = path.split('/').pop();
+                    const mode = getAceMode(fileName);
                     appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-4">
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-4">
           <div class="bg-[#161b22] border border-[#f85149]/30 rounded-lg p-4 mb-4">
-            <div class="flex items-center gap-2 text-sm mb-3">
-              ${icon('alert','w-5 h-5 text-[#f85149]')}
-              <span class="text-[#f85149] font-semibold">You are about to delete this file</span>
-            </div>
-            <p class="text-sm text-[#8b949e]">
-              <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a>
-              / <span class="text-[#e6edf3]">${escapeHtml(path)}</span> on branch <span class="text-[#e6edf3]">${escapeHtml(branch)}</span>
-            </p>
+            <div class="flex items-center gap-2 text-sm mb-3">${icon('alert','w-5 h-5 text-[#f85149]')} <span class="text-[#f85149] font-semibold">You are about to delete this file</span></div>
+            <p class="text-sm text-[#8b949e]"><a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a> / <span class="text-[#e6edf3]">${escapeHtml(fileName)}</span> on branch <span class="text-[#e6edf3]">${escapeHtml(branch)}</span></p>
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg overflow-hidden mb-4">
             <div class="px-4 py-2 border-b border-[#30363d] text-sm text-[#8b949e]">File content preview</div>
-            <pre class="overflow-x-auto p-4"><code class="text-sm font-mono text-[#e6edf3]">${escapeHtml(fileContent.substring(0,2000))}${fileContent.length>2000?'...':''}</code></pre>
+            <div id="ace-viewer-delete" class="ace-editor readonly"></div>
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
             <label class="block text-sm text-[#e6edf3] mb-2 font-medium">Commit message</label>
-            <input type="text" id="delete-commit-message" class="w-full" placeholder="Delete ${escapeHtml(path.split('/').pop())}" value="Delete ${escapeHtml(path.split('/').pop())}">
+            <input type="text" id="delete-commit-message" class="w-full" placeholder="Delete ${escapeHtml(fileName)}" value="Delete ${escapeHtml(fileName)}">
             <label class="block text-sm text-[#e6edf3] mb-2 mt-3 font-medium">Branch</label>
             <input type="text" id="delete-branch" class="w-full" value="${escapeHtml(branch)}">
           </div>
           <div class="flex items-center gap-3">
             <button id="delete-btn" class="btn-danger">Delete this file</button>
-            <a href="#/${owner}/${repoName}/tree/${branch}/${path}" class="btn-secondary">Cancel</a>
+            <a href="#/${owner}/${repoName}/tree/${branch}/${encodeURIComponent(path)}" class="btn-secondary">Cancel</a>
           </div>
           <p id="delete-error" class="text-[#f85149] text-sm mt-2 hidden"></p>
         </div>`;
                     bindHeaderEvents();
+                    setTimeout(() => { createAceEditor('ace-viewer-delete', fileContent, mode, true); }, 100);
                     document.getElementById('delete-btn').addEventListener('click', async () => {
                         const message = document.getElementById('delete-commit-message').value.trim();
                         const delBranch = document.getElementById('delete-branch').value.trim();
                         const errEl = document.getElementById('delete-error');
                         if (!message) { errEl.textContent = 'Please enter a commit message';
                             errEl.classList.remove('hidden'); return; }
-                        if (!confirm(
-                                'Are you sure you want to delete this file? This action cannot be undone.'
-                                )) return;
+                        if (!confirm('Are you sure you want to delete this file? This action cannot be undone.'
+                            )) return;
                         try {
                             await apiFetch(`/repos/${owner}/${repoName}/contents/${path}`, {
                                 method: 'DELETE',
@@ -981,12 +1148,10 @@
                             });
                             showToast('File deleted successfully!', 'success');
                             window.location.hash =
-                                `#/${owner}/${repoName}/tree/${delBranch}/${path.split('/').slice(0,-1).join('/')}`;
+                                `#/${owner}/${repoName}/tree/${delBranch}/${encodeURIComponent(path.split('/').slice(0,-1).join('/'))}`;
                             navigate();
-                        } catch (e) {
-                            errEl.textContent = e.message;
-                            errEl.classList.remove('hidden');
-                        }
+                        } catch (e) { errEl.textContent = e.message;
+                            errEl.classList.remove('hidden'); }
                     });
                 } catch (e) {
                     appEl.innerHTML =
@@ -997,16 +1162,13 @@
 
             async function renderNewFilePage(owner, repoName, branch, path) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 const defaultPath = path || '';
                 appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-4">
-          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
-            <div class="flex items-center gap-2 text-sm flex-wrap mb-3">
-              <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a>
-              <span class="text-[#8b949e]">/</span>
-              <span class="text-[#e6edf3]">New file</span>
-            </div>
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-4">
+          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-3 sm:p-4 mb-4">
+            <div class="flex items-center gap-2 text-sm flex-wrap mb-3"><a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a><span class="text-[#8b949e]">/</span><span class="text-[#e6edf3]">New file</span></div>
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
             <label class="block text-sm text-[#e6edf3] mb-2 font-medium">File path</label>
@@ -1014,7 +1176,7 @@
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
             <label class="block text-sm text-[#e6edf3] mb-2 font-medium">File content</label>
-            <textarea id="new-file-content" class="code-editor" placeholder="Enter file content..."></textarea>
+            <div id="ace-editor-new" class="ace-editor"></div>
           </div>
           <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
             <label class="block text-sm text-[#e6edf3] mb-2 font-medium">Commit message</label>
@@ -1029,9 +1191,10 @@
           <p id="new-error" class="text-[#f85149] text-sm mt-2 hidden"></p>
         </div>`;
                 bindHeaderEvents();
+                setTimeout(() => { createAceEditor('ace-editor-new', '', 'text', false); }, 100);
                 document.getElementById('create-file-btn').addEventListener('click', async () => {
                     const filePath = document.getElementById('new-file-path').value.trim();
-                    const content = document.getElementById('new-file-content').value;
+                    const content = getEditorValue('ace-editor-new');
                     const message = document.getElementById('new-commit-message').value.trim();
                     const newBranch = document.getElementById('new-branch').value.trim();
                     const errEl = document.getElementById('new-error');
@@ -1044,35 +1207,25 @@
                     try {
                         await apiFetch(`/repos/${owner}/${repoName}/contents/${filePath}`, {
                             method: 'PUT',
-                            body: JSON.stringify({
-                                message,
-                                content: btoa(unescape(encodeURIComponent(content))),
-                                branch: newBranch,
-                            }),
+                            body: JSON.stringify({ message, content: encodeBase64(content), branch: newBranch }),
                         });
                         showToast('File created successfully!', 'success');
                         window.location.hash =
-                            `#/${owner}/${repoName}/tree/${newBranch}/${filePath}`;
+                            `#/${owner}/${repoName}/tree/${newBranch}/${encodeURIComponent(filePath)}`;
                         navigate();
-                    } catch (e) {
-                        errEl.textContent = e.message;
-                        errEl.classList.remove('hidden');
-                    }
+                    } catch (e) { errEl.textContent = e.message;
+                        errEl.classList.remove('hidden'); }
                 });
             }
 
             async function renderUploadPage(owner, repoName, branch, path) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-4">
-          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 mb-4">
-            <div class="flex items-center gap-2 text-sm mb-3">
-              <a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a>
-              <span class="text-[#8b949e]">/</span>
-              <span class="text-[#e6edf3]">Upload files</span>
-              <span class="text-xs text-[#8b949e]">to ${escapeHtml(branch)}</span>
-            </div>
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-4">
+          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-3 sm:p-4 mb-4">
+            <div class="flex items-center gap-2 text-sm mb-3"><a href="#/${owner}/${repoName}" class="text-[#58a6ff] hover:underline">${escapeHtml(owner)}/${escapeHtml(repoName)}</a><span class="text-[#8b949e]">/</span><span class="text-[#e6edf3]">Upload files</span><span class="text-xs text-[#8b949e]">to ${escapeHtml(branch)}</span></div>
           </div>
           <div class="bg-[#161b22] border border-dashed border-[#30363d] rounded-lg p-10 mb-4 text-center cursor-pointer hover:border-[#58a6ff]/50 transition-colors" id="drop-zone">
             <svg class="w-12 h-12 mx-auto text-[#8b949e] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -1110,21 +1263,17 @@
                 dropZone.addEventListener('dragover', (e) => { e.preventDefault();
                     dropZone.classList.add('border-[#58a6ff]'); });
                 dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-[#58a6ff]'); });
-                dropZone.addEventListener('drop', (e) => {
-                    e.preventDefault();
+                dropZone.addEventListener('drop', (e) => { e.preventDefault();
                     dropZone.classList.remove('border-[#58a6ff]');
-                    handleFiles(e.dataTransfer.files);
-                });
+                    handleFiles(e.dataTransfer.files); });
                 fileInput.addEventListener('change', () => handleFiles(fileInput.files));
 
-                function handleFiles(files) {
-                    selectedFiles = Array.from(files);
+                function handleFiles(files) { selectedFiles = Array.from(files);
                     fileList.classList.remove('hidden');
                     fileListItems.innerHTML = selectedFiles.map(f =>
                         `<div class="flex items-center gap-2 text-sm text-[#e6edf3] py-1"><svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> ${escapeHtml(f.name)} <span class="text-xs text-[#8b949e]">(${(f.size/1024).toFixed(1)} KB)</span></div>`
                         ).join('');
-                    uploadBtn.disabled = selectedFiles.length === 0;
-                }
+                    uploadBtn.disabled = selectedFiles.length === 0; }
                 uploadBtn.addEventListener('click', async () => {
                     const message = document.getElementById('upload-commit-message').value.trim();
                     const uploadBranch = document.getElementById('upload-branch').value.trim();
@@ -1140,26 +1289,18 @@
                     let successCount = 0;
                     for (const file of selectedFiles) {
                         statusEl.textContent = `Uploading ${file.name}...`;
-                        const base64Content = await new Promise((resolve) => {
-                            const reader = new FileReader();
+                        const base64Content = await new Promise((resolve) => { const reader = new FileReader();
                             reader.onload = () => resolve(reader.result.split(',')[1]);
-                            reader.readAsDataURL(file);
-                        });
-                        const fullPath = uploadPath ? uploadPath.replace(/\/$/, '') + '/' + file.name :
-                            file.name;
+                            reader.readAsDataURL(file); });
+                        const fullPath = uploadPath ? uploadPath.replace(/\/$/, '') + '/' + file.name : file.name;
                         try {
                             await apiFetch(`/repos/${owner}/${repoName}/contents/${fullPath}`, {
                                 method: 'PUT',
-                                body: JSON.stringify({
-                                    message: message + ' - ' + file.name,
-                                    content: base64Content,
-                                    branch: uploadBranch,
-                                }),
+                                body: JSON.stringify({ message: message + ' - ' + file.name,
+                                    content: base64Content, branch: uploadBranch }),
                             });
                             successCount++;
-                        } catch (e) {
-                            statusEl.textContent = `Error uploading ${file.name}: ${e.message}`;
-                        }
+                        } catch (e) { statusEl.textContent = `Error uploading ${file.name}: ${e.message}`; }
                     }
                     statusEl.textContent = '';
                     statusEl.classList.add('hidden');
@@ -1171,88 +1312,112 @@
 
             async function renderSettingsPage(owner, repoName) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 try {
                     const repo = await apiFetch(`/repos/${owner}/${repoName}`);
+                    let pagesData = null;
+                    try { pagesData = await apiFetch(`/repos/${owner}/${repoName}/pages`); } catch (e) {}
+                    const branches = await apiFetch(`/repos/${owner}/${repoName}/branches?per_page=20`).catch(
+                    () => []);
                     appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-4">
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-4">
           <div class="flex gap-6 flex-col md:flex-row">
             <aside class="w-full md:w-56 flex-shrink-0">
-              <nav class="bg-[#161b22] border border-[#30363d] rounded-lg p-2 space-y-1 sticky top-20">
-                <a href="#/${owner}/${repoName}/settings" class="block px-3 py-2 text-sm rounded-md bg-[#1f2428] text-[#e6edf3] font-medium">General</a>
-                <span class="block px-3 py-2 text-sm rounded-md text-[#8b949e]">Pages</span>
-                <span class="block px-3 py-2 text-sm rounded-md text-[#8b949e]">Collaborators</span>
-                <span class="block px-3 py-2 text-sm rounded-md text-[#8b949e]">Branches</span>
-                <span class="block px-3 py-2 text-sm rounded-md text-[#8b949e]">Webhooks</span>
+              <nav class="bg-[#161b22] border border-[#30363d] rounded-lg p-2 space-y-1 sticky top-20" id="settings-nav">
+                <a href="#" class="settings-tab block px-3 py-2 text-sm rounded-md bg-[#1f2428] text-[#e6edf3] font-medium" data-tab="general">General</a>
+                <a href="#" class="settings-tab block px-3 py-2 text-sm rounded-md text-[#c9d1d9] hover:bg-[#1f2428] hover:text-[#e6edf3]" data-tab="pages">Pages</a>
+                <a href="#" class="settings-tab block px-3 py-2 text-sm rounded-md text-[#c9d1d9] hover:bg-[#1f2428] hover:text-[#e6edf3]" data-tab="collaborators">Collaborators</a>
+                <a href="#" class="settings-tab block px-3 py-2 text-sm rounded-md text-[#c9d1d9] hover:bg-[#1f2428] hover:text-[#e6edf3]" data-tab="branches">Branches</a>
+                <a href="#" class="settings-tab block px-3 py-2 text-sm rounded-md text-[#c9d1d9] hover:bg-[#1f2428] hover:text-[#e6edf3]" data-tab="webhooks">Webhooks</a>
               </nav>
             </aside>
-            <main class="flex-1 min-w-0 space-y-4">
-              <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-6">
-                <h3 class="text-base font-semibold text-[#e6edf3] mb-4">General Settings</h3>
-                <div class="space-y-4">
-                  <div>
-                    <label class="block text-sm text-[#e6edf3] mb-1 font-medium">Repository name</label>
-                    <input type="text" id="settings-name" class="w-full max-w-md" value="${escapeHtml(repo.name)}">
+            <main class="flex-1 min-w-0">
+              <div id="settings-panel-general" class="settings-panel space-y-4">
+                <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 sm:p-6">
+                  <h3 class="text-base font-semibold text-[#e6edf3] mb-4">General Settings</h3>
+                  <div class="space-y-4">
+                    <div><label class="block text-sm text-[#e6edf3] mb-1 font-medium">Repository name</label><input type="text" id="settings-name" class="w-full max-w-md" value="${escapeHtml(repo.name)}"></div>
+                    <div><label class="block text-sm text-[#e6edf3] mb-1 font-medium">Description</label><input type="text" id="settings-desc" class="w-full max-w-md" value="${escapeHtml(repo.description||'')}" placeholder="Description"></div>
+                    <div><label class="block text-sm text-[#e6edf3] mb-1 font-medium">Default branch</label><input type="text" id="settings-branch" class="w-full max-w-md" value="${escapeHtml(repo.default_branch)}"></div>
+                    <div>
+                      <label class="block text-sm text-[#e6edf3] mb-2 font-medium">Visibility</label>
+                      <div class="space-y-2">
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="radio" name="visibility" value="public" class="custom-radio" ${!repo.private?'checked':''}><span class="text-sm text-[#e6edf3]">Public</span></label>
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="radio" name="visibility" value="private" class="custom-radio" ${repo.private?'checked':''}><span class="text-sm text-[#e6edf3]">Private</span></label>
+                      </div>
+                    </div>
+                    <button id="save-settings-btn" class="btn-primary">Save changes</button>
+                    <p id="settings-msg" class="text-sm hidden"></p>
                   </div>
-                  <div>
-                    <label class="block text-sm text-[#e6edf3] mb-1 font-medium">Description</label>
-                    <input type="text" id="settings-desc" class="w-full max-w-md" value="${escapeHtml(repo.description||'')}" placeholder="Description">
+                </div>
+                <div class="bg-[#161b22] border border-[#f85149]/30 rounded-lg p-4 sm:p-6">
+                  <h3 class="text-base font-semibold text-[#f85149] mb-2">Danger Zone</h3>
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between flex-wrap gap-3 p-3 border border-[#30363d] rounded-lg">
+                      <div><p class="text-sm font-medium text-[#e6edf3]">Archive this repository</p><p class="text-xs text-[#8b949e]">Mark this repository as archived and read-only.</p></div>
+                      <button id="archive-repo-btn" class="btn-danger text-sm">${repo.archived?'Unarchive':'Archive'} repository</button>
+                    </div>
+                    <div class="flex items-center justify-between flex-wrap gap-3 p-3 border border-[#30363d] rounded-lg">
+                      <div><p class="text-sm font-medium text-[#f85149]">Delete this repository</p><p class="text-xs text-[#8b949e]">Once you delete a repository, there is no going back.</p></div>
+                      <button id="delete-repo-btn" class="btn-danger text-sm">Delete repository</button>
+                    </div>
+                    <div id="delete-confirm" class="hidden p-3 border border-[#f85149]/50 rounded-lg">
+                      <p class="text-sm text-[#f85149] mb-3">To confirm, type <strong>${escapeHtml(repo.full_name)}</strong> below:</p>
+                      <input type="text" id="delete-confirm-input" class="w-full max-w-md mb-3" placeholder="${escapeHtml(repo.full_name)}">
+                      <button id="delete-confirm-btn" class="btn-danger" disabled>I understand, delete this repository</button>
+                    </div>
                   </div>
-                  <div>
-                    <label class="block text-sm text-[#e6edf3] mb-1 font-medium">Default branch</label>
-                    <input type="text" id="settings-branch" class="w-full max-w-md" value="${escapeHtml(repo.default_branch)}">
-                  </div>
-                  <div>
-                    <label class="flex items-center gap-2 text-sm text-[#e6edf3]">
-                      <input type="checkbox" id="settings-private" ${repo.private?'checked':''} class="rounded bg-[#0d1117] border-[#30363d]">
-                      Private repository
-                    </label>
-                  </div>
-                  <button id="save-settings-btn" class="btn-primary">Save changes</button>
-                  <p id="settings-msg" class="text-sm hidden"></p>
                 </div>
               </div>
-              <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-6">
-                <h3 class="text-base font-semibold text-[#e6edf3] mb-4">GitHub Pages</h3>
-                <p class="text-sm text-[#8b949e] mb-3">Configure GitHub Pages for this repository.</p>
-                <div class="space-y-3">
-                  <div>
-                    <label class="block text-sm text-[#e6edf3] mb-1 font-medium">Source branch</label>
-                    <select id="pages-branch" class="w-full max-w-md">
-                      <option value="">None</option>
-                      <option value="${escapeHtml(repo.default_branch)}" selected>${escapeHtml(repo.default_branch)}</option>
-                    </select>
+              <div id="settings-panel-pages" class="settings-panel space-y-4 hidden">
+                <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 sm:p-6">
+                  <h3 class="text-base font-semibold text-[#e6edf3] mb-4">GitHub Pages</h3>
+                  ${pagesData?.html_url?`<p class="text-sm text-[#3fb950] mb-3 flex items-center gap-2">${icon('globe','w-4 h-4')} Your site is live at <a href="${pagesData.html_url}" target="_blank" rel="noopener" class="text-[#58a6ff] hover:underline font-semibold">${pagesData.html_url}</a></p>`:'<p class="text-sm text-[#8b949e] mb-3">GitHub Pages is not yet configured.</p>'}
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-sm text-[#e6edf3] mb-2 font-medium">Source</label>
+                      <div class="space-y-2">
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="radio" name="pages-source" value="branch" class="custom-radio" ${!pagesData||pagesData.source?.branch?'checked':''}><span class="text-sm text-[#e6edf3]">Deploy from a branch</span></label>
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="radio" name="pages-source" value="actions" class="custom-radio" ${pagesData&&pagesData.source?.path==='/actions'?'checked':''}><span class="text-sm text-[#e6edf3]">GitHub Actions</span></label>
+                      </div>
+                    </div>
+                    <div id="pages-branch-config">
+                      <label class="block text-sm text-[#e6edf3] mb-1 font-medium">Branch</label>
+                      <select id="pages-branch-select" class="w-full max-w-md">
+                        ${branches.map(b=>`<option value="${escapeHtml(b.name)}" ${pagesData&&pagesData.source?.branch===b.name?'selected':''}>${escapeHtml(b.name)}</option>`).join('')}
+                      </select>
+                      <label class="block text-sm text-[#e6edf3] mb-1 mt-3 font-medium">Folder</label>
+                      <select id="pages-folder-select" class="w-full max-w-md">
+                        <option value="/" ${pagesData&&pagesData.source?.path==='/'?'selected':''}>/ (root)</option>
+                        <option value="/docs" ${pagesData&&pagesData.source?.path==='/docs'?'selected':''}>/docs</option>
+                      </select>
+                    </div>
+                    <button id="save-pages-btn" class="btn-primary">Save Pages settings</button>
+                    ${pagesData?`<button id="remove-pages-btn" class="btn-danger text-sm ml-2">Remove Pages</button>`:''}
                   </div>
-                  <div>
-                    <label class="block text-sm text-[#e6edf3] mb-1 font-medium">Folder</label>
-                    <select id="pages-folder" class="w-full max-w-md">
-                      <option value="/">/ (root)</option>
-                      <option value="/docs">/docs</option>
-                    </select>
-                  </div>
-                  <button id="save-pages-btn" class="btn-primary">Save Pages settings</button>
                 </div>
               </div>
-              <div class="bg-[#161b22] border border-[#f85149]/30 rounded-lg p-6">
-                <h3 class="text-base font-semibold text-[#f85149] mb-2">Danger Zone</h3>
-                <p class="text-sm text-[#8b949e] mb-4">Once you delete a repository, there is no going back. Please be certain.</p>
-                <button id="delete-repo-btn" class="btn-danger">Delete this repository</button>
-                <div id="delete-confirm" class="mt-4 hidden">
-                  <p class="text-sm text-[#f85149] mb-3">To confirm, type <strong>${escapeHtml(repo.full_name)}</strong> below:</p>
-                  <input type="text" id="delete-confirm-input" class="w-full max-w-md mb-3" placeholder="${escapeHtml(repo.full_name)}">
-                  <button id="delete-confirm-btn" class="btn-danger" disabled>I understand, delete this repository</button>
-                </div>
-                <p id="delete-msg" class="text-sm mt-2 hidden"></p>
+              <div id="settings-panel-collaborators" class="settings-panel space-y-4 hidden">
+                <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 sm:p-6"><h3 class="text-base font-semibold text-[#e6edf3] mb-4">Collaborators</h3><p class="text-sm text-[#8b949e]">Collaborator management requires admin access. Use the GitHub website for full collaborator management.</p></div>
+              </div>
+              <div id="settings-panel-branches" class="settings-panel space-y-4 hidden">
+                <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 sm:p-6"><h3 class="text-base font-semibold text-[#e6edf3] mb-4">Branches</h3><div class="space-y-2">${branches.map(b=>`<div class="flex items-center gap-2 text-sm text-[#e6edf3] py-1 px-3 bg-[#0d1117] rounded">${icon('branch','w-4 h-4 text-[#8b949e]')} ${escapeHtml(b.name)} ${b.protected?'<span class="text-xs text-[#8b949e] border border-[#30363d] rounded-full px-2">Protected</span>':''}</div>`).join('')}</div></div>
+              </div>
+              <div id="settings-panel-webhooks" class="settings-panel space-y-4 hidden">
+                <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 sm:p-6"><h3 class="text-base font-semibold text-[#e6edf3] mb-4">Webhooks</h3><p class="text-sm text-[#8b949e]">Webhook management is available via the GitHub API. Use the GitHub website for full webhook management.</p></div>
               </div>
             </main>
           </div>
         </div>`;
                     bindHeaderEvents();
+                    bindSettingsTabs();
                     document.getElementById('save-settings-btn').addEventListener('click', async () => {
                         const name = document.getElementById('settings-name').value.trim();
                         const desc = document.getElementById('settings-desc').value.trim();
                         const branch = document.getElementById('settings-branch').value.trim();
-                        const isPrivate = document.getElementById('settings-private').checked;
+                        const isPrivate = document.querySelector('input[name="visibility"]:checked')
+                            ?.value === 'private';
                         const msgEl = document.getElementById('settings-msg');
                         try {
                             await apiFetch(`/repos/${owner}/${repoName}`, {
@@ -1263,41 +1428,68 @@
                             msgEl.textContent = 'Settings saved!';
                             msgEl.className = 'text-sm text-[#3fb950]';
                             msgEl.classList.remove('hidden');
-                            if (name !== repoName) {
-                                window.location.hash = `#/${owner}/${name}/settings`;
-                                navigate();
-                            }
-                        } catch (e) {
-                            msgEl.textContent = e.message;
+                            if (name !== repoName) { window.location.hash =
+                                    `#/${owner}/${name}/settings`;
+                                navigate(); }
+                        } catch (e) { msgEl.textContent = e.message;
                             msgEl.className = 'text-sm text-[#f85149]';
-                            msgEl.classList.remove('hidden');
-                        }
+                            msgEl.classList.remove('hidden'); }
+                    });
+                    document.getElementById('archive-repo-btn').addEventListener('click', async () => {
+                        const newArchived = !repo.archived;
+                        if (!confirm(
+                                `Are you sure you want to ${newArchived?'archive':'unarchive'} this repository?`
+                                )) return;
+                        try {
+                            await apiFetch(`/repos/${owner}/${repoName}`, {
+                                method: 'PATCH',
+                                body: JSON.stringify({ archived: newArchived }),
+                            });
+                            showToast(`Repository ${newArchived?'archived':'unarchived'}!`, 'success');
+                            repo.archived = newArchived;
+                            document.getElementById('archive-repo-btn').textContent =
+                                `${newArchived?'Unarchive':'Archive'} repository`;
+                        } catch (e) { showToast(e.message, 'error'); }
+                    });
+                    document.getElementById('delete-repo-btn').addEventListener('click', () => { document
+                            .getElementById('delete-confirm').classList.remove('hidden'); });
+                    document.getElementById('delete-confirm-input').addEventListener('input', function() {
+                        document.getElementById('delete-confirm-btn').disabled = this.value.trim() !==
+                            repo.full_name; });
+                    document.getElementById('delete-confirm-btn').addEventListener('click', async () => {
+                        try { await apiFetch(`/repos/${owner}/${repoName}`, { method: 'DELETE' });
+                            showToast('Repository deleted.', 'info');
+                            window.location.hash = '#/dashboard';
+                            navigate(); } catch (e) { showToast(e.message, 'error'); }
                     });
                     document.getElementById('save-pages-btn').addEventListener('click', async () => {
-                        const branch = document.getElementById('pages-branch').value;
-                        const folder = document.getElementById('pages-folder').value;
+                        const sourceType = document.querySelector('input[name="pages-source"]:checked')
+                            ?.value;
+                        const branch = document.getElementById('pages-branch-select')?.value;
+                        const folder = document.getElementById('pages-folder-select')?.value;
                         try {
-                            await apiFetch(`/repos/${owner}/${repoName}/pages`, {
-                                method: 'POST',
-                                body: JSON.stringify({ source: { branch, path: folder } }),
-                            });
+                            if (pagesData) {
+                                await apiFetch(`/repos/${owner}/${repoName}/pages`, {
+                                    method: 'PUT',
+                                    body: JSON.stringify({ source: { branch, path: folder } }),
+                                });
+                            } else {
+                                await apiFetch(`/repos/${owner}/${repoName}/pages`, {
+                                    method: 'POST',
+                                    body: JSON.stringify({ source: { branch, path: folder },
+                                        build_type: sourceType === 'actions' ? 'workflow' :
+                                            'legacy' }),
+                                });
+                            }
                             showToast('Pages settings saved!', 'success');
                         } catch (e) { showToast(e.message, 'error'); }
                     });
-                    document.getElementById('delete-repo-btn').addEventListener('click', () => {
-                        document.getElementById('delete-confirm').classList.remove('hidden');
-                    });
-                    document.getElementById('delete-confirm-input').addEventListener('input', function() {
-                        document.getElementById('delete-confirm-btn').disabled = this.value.trim() !==
-                            repo.full_name;
-                    });
-                    document.getElementById('delete-confirm-btn').addEventListener('click', async () => {
-                        try {
-                            await apiFetch(`/repos/${owner}/${repoName}`, { method: 'DELETE' });
-                            showToast('Repository deleted.', 'info');
-                            window.location.hash = '#/dashboard';
-                            navigate();
-                        } catch (e) { showToast(e.message, 'error'); }
+                    document.getElementById('remove-pages-btn')?.addEventListener('click', async () => {
+                        if (!confirm('Are you sure you want to remove GitHub Pages?')) return;
+                        try { await apiFetch(`/repos/${owner}/${repoName}/pages`, { method: 'DELETE' });
+                            showToast('Pages removed.', 'info');
+                            window.location.hash = `#/${owner}/${repoName}/settings`;
+                            navigate(); } catch (e) { showToast(e.message, 'error'); }
                     });
                 } catch (e) {
                     appEl.innerHTML =
@@ -1306,25 +1498,45 @@
                 }
             }
 
+            function bindSettingsTabs() {
+                const tabs = document.querySelectorAll('.settings-tab');
+                const panels = document.querySelectorAll('.settings-panel');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        tabs.forEach(t => { t.classList.remove('bg-[#1f2428]', 'text-[#e6edf3]',
+                                'font-medium');
+                            t.classList.add('text-[#c9d1d9]'); });
+                        this.classList.add('bg-[#1f2428]', 'text-[#e6edf3]', 'font-medium');
+                        this.classList.remove('text-[#c9d1d9]');
+                        const target = this.dataset.tab;
+                        panels.forEach(p => p.classList.add('hidden'));
+                        document.getElementById('settings-panel-' + target)?.classList.remove(
+                            'hidden');
+                    });
+                });
+            }
+
             async function renderOrgPage(orgName) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 try {
                     const org = await apiFetch(`/orgs/${orgName}`);
                     const repos = await apiFetch(`/orgs/${orgName}/repos?sort=updated&per_page=30`);
                     appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-6">
-          <div class="flex items-center gap-4 mb-6">
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-6">
+          <div class="flex items-center gap-4 mb-6 flex-wrap">
             <img src="${org.avatar_url}" alt="" class="w-16 h-16 rounded-full" onerror="this.style.display='none'">
-            <div>
-              <h2 class="text-xl font-semibold text-[#e6edf3]">${escapeHtml(org.name || org.login)}</h2>
+            <div class="flex-1 min-w-0">
+              <h2 class="text-xl font-semibold text-[#e6edf3]">${escapeHtml(org.name||org.login)}</h2>
               <p class="text-sm text-[#8b949e]">@${escapeHtml(org.login)}</p>
-              ${org.description ? `<p class="text-sm text-[#8b949e] mt-1">${escapeHtml(org.description)}</p>` : ''}
+              ${org.description?`<p class="text-sm text-[#8b949e] mt-1">${escapeHtml(org.description)}</p>`:''}
             </div>
-            <a href="#/orgs/${orgName}/new" class="btn-primary ml-auto">New repository</a>
+            <a href="#/orgs/${orgName}/new" class="btn-primary flex items-center gap-1">${icon('plus','w-4 h-4')} New repository</a>
           </div>
           <div class="space-y-3">
-            ${repos.map(repo => `
+            ${repos.map(repo=>`
             <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 hover:border-[#58a6ff]/30 transition-colors">
               <div class="flex items-center gap-2 mb-1">
                 <svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
@@ -1345,31 +1557,16 @@
 
             async function renderOrgNewPage(orgName) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-2xl mx-auto px-4 py-6">
+        <div class="max-w-2xl mx-auto px-3 sm:px-4 py-6">
           <h2 class="text-lg font-semibold text-[#e6edf3] mb-4">Create a new repository in ${escapeHtml(orgName)}</h2>
-          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-6 space-y-4">
-            <div>
-              <label class="block text-sm text-[#e6edf3] mb-1 font-medium">Repository name</label>
-              <input type="text" id="new-repo-name" class="w-full" placeholder="my-awesome-repo">
-            </div>
-            <div>
-              <label class="block text-sm text-[#e6edf3] mb-1 font-medium">Description</label>
-              <input type="text" id="new-repo-desc" class="w-full" placeholder="A short description">
-            </div>
-            <div>
-              <label class="flex items-center gap-2 text-sm text-[#e6edf3]">
-                <input type="checkbox" id="new-repo-private" class="rounded bg-[#0d1117] border-[#30363d]">
-                Private repository
-              </label>
-            </div>
-            <div>
-              <label class="flex items-center gap-2 text-sm text-[#e6edf3]">
-                <input type="checkbox" id="new-repo-readme" checked class="rounded bg-[#0d1117] border-[#30363d]">
-                Initialize with README
-              </label>
-            </div>
+          <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 sm:p-6 space-y-4">
+            <div><label class="block text-sm text-[#e6edf3] mb-1 font-medium">Repository name</label><input type="text" id="new-repo-name" class="w-full" placeholder="my-awesome-repo"></div>
+            <div><label class="block text-sm text-[#e6edf3] mb-1 font-medium">Description</label><input type="text" id="new-repo-desc" class="w-full" placeholder="A short description"></div>
+            <div><label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="new-repo-private" class="custom-checkbox"><span class="text-sm text-[#e6edf3]">Private repository</span></label></div>
+            <div><label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="new-repo-readme" class="custom-checkbox" checked><span class="text-sm text-[#e6edf3]">Initialize with README</span></label></div>
             <button id="create-org-repo-btn" class="btn-primary">Create repository</button>
             <p id="create-org-error" class="text-[#f85149] text-sm hidden"></p>
           </div>
@@ -1392,50 +1589,40 @@
                         showToast('Repository created!', 'success');
                         window.location.hash = '#/' + repo.full_name;
                         navigate();
-                    } catch (e) {
-                        errEl.textContent = e.message;
-                        errEl.classList.remove('hidden');
-                    }
+                    } catch (e) { errEl.textContent = e.message;
+                        errEl.classList.remove('hidden'); }
                 });
             }
 
             async function renderSearchPage(query) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 const repoResults = await apiFetch(`/search/repositories?q=${encodeURIComponent(query)}&per_page=20`)
-                    .catch(() => ({ items: [] }));
+                    .catch(() => ({ items: [], total_count: 0 }));
                 const userResults = await apiFetch(`/search/users?q=${encodeURIComponent(query)}&per_page=20`).catch(
-                    () => ({ items: [] }));
+                    () => ({ items: [], total_count: 0 }));
                 appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-6">
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-6">
           <h2 class="text-lg font-semibold text-[#e6edf3] mb-4">Search results for "${escapeHtml(query)}"</h2>
           <div class="flex gap-4 mb-4 border-b border-[#30363d]">
             <button class="search-tab px-4 py-2 text-sm font-medium text-[#e6edf3] border-b-2 border-[#58a6ff] -mb-px" data-tab="repos">Repositories (${repoResults.total_count||repoResults.items.length})</button>
             <button class="search-tab px-4 py-2 text-sm text-[#8b949e] hover:text-[#e6edf3] -mb-px" data-tab="users">Users (${userResults.total_count||userResults.items.length})</button>
           </div>
           <div id="tab-repos" class="space-y-3">
-            ${repoResults.items.map(repo => `
+            ${repoResults.items.map(repo=>`
             <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4">
-              <div class="flex items-center gap-2 mb-1">
-                <svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                <a href="#/${repo.full_name}" class="text-[#58a6ff] font-semibold text-sm hover:underline">${escapeHtml(repo.full_name)}</a>
-              </div>
+              <div class="flex items-center gap-2 mb-1"><svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><a href="#/${repo.full_name}" class="text-[#58a6ff] font-semibold text-sm hover:underline">${escapeHtml(repo.full_name)}</a></div>
               <p class="text-xs text-[#8b949e] mb-2">${escapeHtml(repo.description||'')}</p>
-              <div class="flex items-center gap-3 text-xs text-[#8b949e]">
-                ${repo.language?`<span>${escapeHtml(repo.language)}</span>`:''}
-                <span>${icon('star','w-3 h-3 inline')} ${repo.stargazers_count}</span>
-              </div>
+              <div class="flex items-center gap-3 text-xs text-[#8b949e]">${repo.language?`<span>${escapeHtml(repo.language)}</span>`:''}<span>${icon('star','w-3 h-3 inline')} ${repo.stargazers_count}</span></div>
             </div>`).join('')}
             ${repoResults.items.length===0?'<p class="text-[#8b949e] text-sm">No repositories found.</p>':''}
           </div>
           <div id="tab-users" class="space-y-3 hidden">
-            ${userResults.items.map(user => `
+            ${userResults.items.map(user=>`
             <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4 flex items-center gap-3">
               <img src="${user.avatar_url}" alt="" class="w-10 h-10 rounded-full" onerror="this.style.display='none'">
-              <div>
-                <a href="#/u/${user.login}" class="text-[#58a6ff] font-semibold text-sm hover:underline">${escapeHtml(user.login)}</a>
-                ${user.type==='Organization'?'<span class="text-xs text-[#8b949e] ml-1">(Organization)</span>':''}
-              </div>
+              <div><a href="#/u/${user.login}" class="text-[#58a6ff] font-semibold text-sm hover:underline">${escapeHtml(user.login)}</a>${user.type==='Organization'?'<span class="text-xs text-[#8b949e] ml-1">(Organization)</span>':''}</div>
             </div>`).join('')}
             ${userResults.items.length===0?'<p class="text-[#8b949e] text-sm">No users found.</p>':''}
           </div>
@@ -1448,16 +1635,17 @@
                             t.classList.add('text-[#8b949e]'); });
                         tab.classList.add('border-b-2', 'border-[#58a6ff]', 'text-[#e6edf3]');
                         tab.classList.remove('text-[#8b949e]');
-                        document.getElementById('tab-repos').classList.toggle('hidden', tab
-                            .dataset.tab !== 'repos');
-                        document.getElementById('tab-users').classList.toggle('hidden', tab
-                            .dataset.tab !== 'users');
+                        document.getElementById('tab-repos').classList.toggle('hidden', tab.dataset
+                            .tab !== 'repos');
+                        document.getElementById('tab-users').classList.toggle('hidden', tab.dataset
+                            .tab !== 'users');
                     });
                 });
             }
 
             async function renderUserPage(username) {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 try {
                     const user = await apiFetch(`/users/${username}`);
                     const repos = await apiFetch(`/users/${username}/repos?sort=updated&per_page=30`);
@@ -1466,32 +1654,22 @@
                         isFollowing = true; } catch (e) {}
                     appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-6">
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-6">
           <div class="flex items-start gap-4 mb-6 flex-col sm:flex-row">
             <img src="${user.avatar_url}" alt="" class="w-20 h-20 rounded-full" onerror="this.style.display='none'">
             <div class="flex-1">
               <h2 class="text-xl font-semibold text-[#e6edf3]">${escapeHtml(user.name||user.login)}</h2>
               <p class="text-sm text-[#8b949e]">@${escapeHtml(user.login)}</p>
               ${user.bio?`<p class="text-sm text-[#8b949e] mt-1">${escapeHtml(user.bio)}</p>`:''}
-              <div class="flex items-center gap-4 mt-2 text-sm text-[#8b949e]">
-                <span><strong class="text-[#e6edf3]">${user.followers}</strong> followers</span>
-                <span><strong class="text-[#e6edf3]">${user.following}</strong> following</span>
-              </div>
-              ${username !== currentUser.login ? `
-              <button id="follow-btn" class="btn-secondary text-sm mt-3 flex items-center gap-1">
-                ${isFollowing ? icon('check','w-4 h-4') + ' Following' : icon('plus','w-4 h-4') + ' Follow'}
-              </button>` : ''}
+              <div class="flex items-center gap-4 mt-2 text-sm text-[#8b949e]"><span><strong class="text-[#e6edf3]">${user.followers}</strong> followers</span><span><strong class="text-[#e6edf3]">${user.following}</strong> following</span></div>
+              ${username!==currentUser.login?`<button id="follow-btn" class="btn-secondary text-sm mt-3 flex items-center gap-1">${isFollowing?icon('check','w-4 h-4')+' Following':icon('plus','w-4 h-4')+' Follow'}</button>`:''}
             </div>
           </div>
           <h3 class="text-base font-semibold text-[#e6edf3] mb-3">Repositories</h3>
           <div class="space-y-3">
-            ${repos.map(repo => `
+            ${repos.map(repo=>`
             <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4">
-              <div class="flex items-center gap-2 mb-1">
-                <svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                <a href="#/${repo.full_name}" class="text-[#58a6ff] font-semibold text-sm hover:underline">${escapeHtml(repo.name)}</a>
-                <span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e]">${repo.private?'Private':'Public'}</span>
-              </div>
+              <div class="flex items-center gap-2 mb-1"><svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><a href="#/${repo.full_name}" class="text-[#58a6ff] font-semibold text-sm hover:underline">${escapeHtml(repo.name)}</a><span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e]">${repo.private?'Private':'Public'}</span></div>
               <p class="text-xs text-[#8b949e]">${escapeHtml(repo.description||'')}</p>
             </div>`).join('')}
           </div>
@@ -1501,19 +1679,16 @@
                     if (followBtn) {
                         followBtn.addEventListener('click', async () => {
                             try {
-                                if (isFollowing) {
-                                    await apiFetch(`/user/following/${username}`, { method: 'DELETE' });
+                                if (isFollowing) { await apiFetch(`/user/following/${username}`, { method: 'DELETE' });
                                     isFollowing = false;
                                     followBtn.innerHTML =
                                         `${icon('plus','w-4 h-4')} Follow`;
-                                    showToast('Unfollowed', 'info');
-                                } else {
-                                    await apiFetch(`/user/following/${username}`, { method: 'PUT' });
+                                    showToast('Unfollowed', 'info'); } else { await apiFetch(
+                                        `/user/following/${username}`, { method: 'PUT' });
                                     isFollowing = true;
                                     followBtn.innerHTML =
                                         `${icon('check','w-4 h-4')} Following`;
-                                    showToast('Following!', 'success');
-                                }
+                                    showToast('Following!', 'success'); }
                             } catch (e) { showToast(e.message, 'error'); }
                         });
                     }
@@ -1526,27 +1701,20 @@
 
             async function renderProfilePage() {
                 if (!currentUser) { renderTokenScreen(); return; }
+                destroyAceInstances();
                 const repos = await apiFetch('/user/repos?sort=updated&per_page=50&type=owner').catch(() => []);
                 appEl.innerHTML = `
         ${renderHeader()}
-        <div class="max-w-5xl mx-auto px-4 py-6">
+        <div class="max-w-5xl mx-auto px-3 sm:px-4 py-6">
           <div class="flex items-start gap-4 mb-6 flex-col sm:flex-row">
             <img src="${currentUser.avatar_url}" alt="" class="w-20 h-20 rounded-full" onerror="this.style.display='none'">
-            <div>
-              <h2 class="text-xl font-semibold text-[#e6edf3]">${escapeHtml(currentUser.name||currentUser.login)}</h2>
-              <p class="text-sm text-[#8b949e]">@${escapeHtml(currentUser.login)}</p>
-              ${currentUser.bio?`<p class="text-sm text-[#8b949e] mt-1">${escapeHtml(currentUser.bio)}</p>`:''}
-            </div>
+            <div><h2 class="text-xl font-semibold text-[#e6edf3]">${escapeHtml(currentUser.name||currentUser.login)}</h2><p class="text-sm text-[#8b949e]">@${escapeHtml(currentUser.login)}</p>${currentUser.bio?`<p class="text-sm text-[#8b949e] mt-1">${escapeHtml(currentUser.bio)}</p>`:''}</div>
           </div>
           <h3 class="text-base font-semibold text-[#e6edf3] mb-3">Your repositories</h3>
           <div class="space-y-3">
-            ${repos.map(repo => `
+            ${repos.map(repo=>`
             <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-4">
-              <div class="flex items-center gap-2 mb-1">
-                <svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                <a href="#/${repo.full_name}" class="text-[#58a6ff] font-semibold text-sm hover:underline">${escapeHtml(repo.name)}</a>
-                <span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e]">${repo.private?'Private':'Public'}</span>
-              </div>
+              <div class="flex items-center gap-2 mb-1"><svg class="w-4 h-4 text-[#8b949e] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><a href="#/${repo.full_name}" class="text-[#58a6ff] font-semibold text-sm hover:underline">${escapeHtml(repo.name)}</a><span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e]">${repo.private?'Private':'Public'}</span></div>
               <p class="text-xs text-[#8b949e]">${escapeHtml(repo.description||'')}</p>
             </div>`).join('')}
           </div>
@@ -1558,81 +1726,41 @@
                 const hash = window.location.hash.slice(1) || '/dashboard';
                 const [path, queryString] = hash.split('?');
                 const query = {};
-                if (queryString) {
-                    queryString.split('&').forEach(p => {
-                        const [k, v] = p.split('=');
-                        query[decodeURIComponent(k)] = decodeURIComponent(v || '');
-                    });
-                }
+                if (queryString) { queryString.split('&').forEach(p => { const [k, v] = p.split('=');
+                        query[decodeURIComponent(k)] = decodeURIComponent(v || ''); }); }
                 const parts = path.split('/').filter(Boolean);
                 return { path, parts, query };
             }
-
             async function navigate() {
                 const { path, parts, query } = parseHash();
-                if (!getToken() && path !== '') {
-                    renderTokenScreen();
-                    return;
-                }
-                if (!currentUser && getToken()) {
-                    const user = await loadUser();
-                    if (!user) { renderTokenScreen(); return; }
-                }
+                if (!getToken() && path !== '') { renderTokenScreen(); return; }
+                if (!currentUser && getToken()) { const user = await loadUser(); if (!user) { renderTokenScreen(); return; } }
                 if (!currentUser && !getToken()) { renderTokenScreen(); return; }
-                if (parts.length === 0 || parts[0] === 'dashboard') {
-                    await renderDashboard();
-                } else if (parts.length === 1 && parts[0] === 'search') {
-                    await renderSearchPage(query.q || '');
-                } else if (parts.length === 1 && parts[0] === 'profile') {
-                    await renderProfilePage();
-                } else if (parts.length === 1 && parts[0] === 'u' && query.q) {
-                    await renderUserPage(query.q);
-                } else if (parts.length === 2 && parts[0] === 'u') {
-                    await renderUserPage(parts[1]);
-                } else if (parts.length === 2 && parts[0] === 'orgs') {
-                    await renderOrgPage(parts[1]);
-                } else if (parts.length === 3 && parts[0] === 'orgs' && parts[2] === 'new') {
-                    await renderOrgNewPage(parts[1]);
-                } else if (parts.length === 2) {
-                    await renderRepoPage(parts[0], parts[1]);
-                } else if (parts.length >= 4 && parts[2] === 'tree') {
-                    const branch = parts[3];
-                    const subPath = parts.slice(4).join('/');
-                    await renderTreePage(parts[0], parts[1], branch, subPath);
-                } else if (parts.length >= 4 && parts[2] === 'edit') {
-                    const branch = parts[3];
-                    const subPath = parts.slice(4).join('/');
-                    await renderEditPage(parts[0], parts[1], branch, subPath);
-                } else if (parts.length >= 4 && parts[2] === 'delete') {
-                    const branch = parts[3];
-                    const subPath = parts.slice(4).join('/');
-                    await renderDeletePage(parts[0], parts[1], branch, subPath);
-                } else if (parts.length >= 4 && parts[2] === 'new') {
-                    const branch = parts[3];
-                    const subPath = parts.slice(4).join('/');
-                    await renderNewFilePage(parts[0], parts[1], branch, subPath);
-                } else if (parts.length >= 4 && parts[2] === 'upload') {
-                    const branch = parts[3];
-                    const subPath = parts.slice(4).join('/');
-                    await renderUploadPage(parts[0], parts[1], branch, subPath);
-                } else if (parts.length === 3 && parts[2] === 'settings') {
-                    await renderSettingsPage(parts[0], parts[1]);
-                } else {
-                    appEl.innerHTML =
-                        `${renderHeader()}<div class="max-w-7xl mx-auto px-4 py-10 text-center"><p class="text-[#8b949e]">Page not found</p><a href="#/dashboard" class="btn-secondary mt-4 inline-block">Go to dashboard</a></div>`;
-                    bindHeaderEvents();
-                }
+                destroyAceInstances();
+                if (parts.length === 0 || parts[0] === 'dashboard') { await renderDashboard(); } else if (parts.length ===
+                    1 && parts[0] === 'search') { await renderSearchPage(query.q || ''); } else if (parts.length === 1 &&
+                    parts[0] === 'profile') { await renderProfilePage(); } else if (parts.length === 2 && parts[0] ===
+                    'u') { await renderUserPage(parts[1]); } else if (parts.length === 2 && parts[0] === 'orgs') { await
+                    renderOrgPage(parts[1]); } else if (parts.length === 3 && parts[0] === 'orgs' && parts[2] ===
+                    'new') { await renderOrgNewPage(parts[1]); } else if (parts.length === 2) { await renderRepoPage(
+                        parts[0], parts[1]); } else if (parts.length >= 4 && parts[2] === 'tree') { const branch = parts[
+                        3]; const subPath = parts.slice(4).join('/'); await renderTreePage(parts[0], parts[1], branch,
+                        subPath); } else if (parts.length >= 4 && parts[2] === 'edit') { const branch = parts[3]; const
+                    subPath = parts.slice(4).join('/'); await renderEditPage(parts[0], parts[1], branch, subPath); } else if (
+                    parts.length >= 4 && parts[2] === 'delete') { const branch = parts[3]; const subPath = parts.slice(4)
+                    .join('/'); await renderDeletePage(parts[0], parts[1], branch, subPath); } else if (parts.length >= 4 &&
+                    parts[2] === 'new') { const branch = parts[3]; const subPath = parts.slice(4).join('/'); await
+                    renderNewFilePage(parts[0], parts[1], branch, subPath); } else if (parts.length >= 4 && parts[2] ===
+                    'upload') { const branch = parts[3]; const subPath = parts.slice(4).join('/'); await renderUploadPage(
+                        parts[0], parts[1], branch, subPath); } else if (parts.length === 3 && parts[2] === 'settings') { await
+                    renderSettingsPage(parts[0], parts[1]); } else { appEl.innerHTML =
+                    `${renderHeader()}<div class="max-w-7xl mx-auto px-4 py-10 text-center"><p class="text-[#8b949e]">Page not found</p><a href="#/dashboard" class="btn-secondary mt-4 inline-block">Go to dashboard</a></div>`;
+                    bindHeaderEvents(); }
                 window.scrollTo(0, 0);
             }
-
             window.addEventListener('hashchange', navigate);
-            async function init() {
-                if (getToken()) {
-                    const user = await loadUser();
-                    if (user) { await navigate(); return; }
-                }
-                renderTokenScreen();
-            }
+            async function init() { if (getToken()) { const user = await loadUser(); if (user) { await navigate(); return; } }
+                renderTokenScreen(); }
             init();
         })();
     </script>
