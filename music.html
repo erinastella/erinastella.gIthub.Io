@@ -387,7 +387,7 @@
                 updateAllPlayIcons(currentSongUrl);
             });
 
-            fetch('res/includes/music.json')
+            fetch('https://blackjim.infy.click/erina/get_music.php')
                 .then(response => {
                     if (!response.ok) throw new Error('Network response was not ok');
                     return response.json();
@@ -399,7 +399,17 @@
                         return;
                     }
 
-                    songsGrid.innerHTML = data.map(song => `
+                    const mappedData = data.map(item => ({
+                        title: item.title,
+                        url: item.source,
+                        art: item.cover_image,
+                        album: item.album || 'Single',
+                        description: item.description || '',
+                        dateCreated: item.dateCreated || new Date().toISOString(),
+                        duration: item.duration || 3.0
+                    }));
+
+                    songsGrid.innerHTML = mappedData.map(song => `
                         <article class="group bg-white dark:bg-neutral-950 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-200 dark:border-neutral-800 flex flex-col">
                             <div class="aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-800 relative">
                                 <img src="${song.art}" alt="${song.title} album art" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -423,7 +433,7 @@
                         btn.addEventListener('click', (e) => {
                             e.preventDefault();
                             const url = btn.dataset.url;
-                            const song = data.find(s => s.url === url);
+                            const song = mappedData.find(s => s.url === url);
                             if (song) loadAndPlaySong(song);
                         });
                     });
